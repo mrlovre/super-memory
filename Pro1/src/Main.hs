@@ -1,6 +1,9 @@
 module Main where
 
 import           Domain
+import           DomainElement
+import           DomainHelper
+import           Instances     ()
 
 main :: IO ()
 main = putStrLn "Hello, Haskell!"
