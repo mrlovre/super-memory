@@ -14,3 +14,7 @@ class FuzzySet a where
 -- | An "any" fuzzy set wrapper around the 'FuzzySet' class.
 data AFuzzySet where
     AFuzzySet :: (FuzzySet a) => a -> AFuzzySet
+
+instance FuzzySet AFuzzySet where
+    domain (AFuzzySet a) = domain a
+    valueAt (AFuzzySet a) = valueAt a

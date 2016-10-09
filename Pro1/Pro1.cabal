@@ -19,9 +19,9 @@ library
   exposed-modules:     Domain, Main, DomainElement, Utility, Instances, Dimensionable, Domains.CompositeDomain,
                        Domains.SimpleDomain, DomainHelper, Instances.SimpleDomainInstances,
                        Instances.CompositeDomainInstances, Instances.DomainElementInstances,
-                       FuzzySet
+                       FuzzySet, FuzzySets.CalculatedFuzzySet, FuzzySets.MutableFuzzySet
   -- other-modules:
   default-extensions:  MultiWayIf, GADTs
-  build-depends:       base >=4.9 && <4.10, mtl >=2.2 && <2.3
+  build-depends:       base >=4.9 && <4.10, mtl >=2.2 && <2.3, vector
   hs-source-dirs:      src
   default-language:    Haskell2010
