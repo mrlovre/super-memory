@@ -3,7 +3,6 @@ module Main where
 import           Domain
 import           DomainElement
 import           DomainHelper
-import           Instances                    ()
 
 import           FuzzySet
 import           FuzzySetHelper
