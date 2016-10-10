@@ -12,7 +12,7 @@ import           FuzzySets.MutableFuzzySet
 import           Control.Arrow
 
 main :: IO ()
-main = demo1 >> demo2
+main = demo1 >> demo2 >> demo3
 
 demo1 :: IO ()
 demo1 = do
@@ -38,6 +38,9 @@ demo2 = do
         set2 = calculatedFuzzySet (lambdaFunctionGenerator i1 i2 i3) domain2
     print $ AFuzzySet set1
     print $ AFuzzySet set2
+
+demo3 :: IO ()
+demo3 = return ()
 
 domainInfo :: (Domain a) => a -> String
 domainInfo d = unlines $
