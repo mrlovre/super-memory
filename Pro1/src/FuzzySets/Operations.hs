@@ -1,5 +1,5 @@
 -- | Provides basic unary and binary operations.
-module Operations where
+module FuzzySets.Operations where
 
 -- | Zadeh complement.
 zadehNot :: Double -> Double
