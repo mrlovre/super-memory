@@ -18,3 +18,9 @@ data AFuzzySet where
 instance FuzzySet AFuzzySet where
     domain (AFuzzySet a) = domain a
     valueAt (AFuzzySet a) = valueAt a
+
+instance Show AFuzzySet where
+    show (AFuzzySet fuzzySet) = let
+        d = domain fuzzySet
+        display element = show element ++ " -> " ++ show (valueAt fuzzySet element)
+        in unlines $ map display $ iterator d

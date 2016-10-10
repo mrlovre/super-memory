@@ -1,9 +1,5 @@
 module Domain where
 
-import           Control.Arrow
-import           Control.Monad.State
-import           Domains.CompositeDomain
-
 import           Dimensionable
 import           DomainElement
 
@@ -38,10 +34,6 @@ instance Show ADomain where
         fromZero = [0 ..] :: [Int]
         in unlines $ zipWith (++) (map ((++ "# element: ") . show) fromZero) (map show $ iterator domain)
 
-instance Show DomainElement where
-    show (DomainElement a) = show a
-
-
 instance Domain ADomain where
     cardinality (ADomain a) = cardinality a
     getComponent (ADomain a) = getComponent a
@@ -51,6 +43,3 @@ instance Domain ADomain where
 
 instance Dimensionable ADomain where
     dimension (ADomain a) = dimension a
-
-instance Dimensionable CompositeDomain where
-    dimension (CompositeDomain a) = length a
