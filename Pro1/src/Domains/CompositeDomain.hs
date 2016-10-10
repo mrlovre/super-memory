@@ -1,12 +1,12 @@
 module Domains.CompositeDomain where
 
-import           Dimensionable
-import           Domain
+import           Domains.Dimensionable
+import           Domains.Domain
 import           Domains.SimpleDomain
-import DomainElement
+import           Domains.DomainElement
 
-import Control.Monad.State
-import Utility
+import           Control.Monad.State
+import           Utility
 
 -- | Model of a composite domain which is a cartesian product of several 'SimpleDomain's.
 data CompositeDomain where

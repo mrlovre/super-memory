@@ -1,8 +1,8 @@
 module Domains.SimpleDomain where
 
-import Domain
-import Dimensionable
-import DomainElement
+import Domains.Domain
+import Domains.Dimensionable
+import Domains.DomainElement
 
 -- | Model of a simple domain which consists of single one-dimensional int range.
 data SimpleDomain = SimpleDomain Int Int

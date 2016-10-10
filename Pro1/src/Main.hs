@@ -1,12 +1,12 @@
 module Main where
 
-import           Domain
-import           DomainElement
-import           DomainHelper
+import           Domains.Domain
+import           Domains.DomainElement
+import           Domains.DomainHelper
 
-import           FuzzySet
-import           FuzzySetHelper
 import           FuzzySets.CalculatedFuzzySet
+import           FuzzySets.FuzzySet
+import           FuzzySets.FuzzySetHelper
 import           FuzzySets.MutableFuzzySet
 
 import           Control.Arrow

@@ -1,12 +1,12 @@
 module FuzzySets.MutableFuzzySet where
 
 import           Control.Arrow
-import           Data.Vector   (Vector, (!), (//))
-import qualified Data.Vector   as V
+import           Data.Vector           (Vector, (!), (//))
+import qualified Data.Vector           as V
 
-import           Domain
-import           DomainElement
-import           FuzzySet
+import           Domains.Domain
+import           Domains.DomainElement
+import           FuzzySets.FuzzySet
 
 data MutableFuzzySet where
     MutableFuzzySet :: ADomain -> Vector Double -> MutableFuzzySet
