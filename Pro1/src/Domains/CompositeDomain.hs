@@ -1,3 +1,4 @@
+-- | Composite domain.
 module Domains.CompositeDomain where
 
 import           Domains.Dimensionable
@@ -17,6 +18,7 @@ createCompositeDomain :: [SimpleDomain] -> CompositeDomain
 createCompositeDomain [] = error "Composite domain must contain at least one component."
 createCompositeDomain other = CompositeDomain other
 
+-- | Domain instance.
 instance Domain CompositeDomain where
     cardinality (CompositeDomain a) = product $ map cardinality a
 
@@ -50,5 +52,6 @@ instance Domain CompositeDomain where
         subdomainElements = map (map extractDomainElement . iterator) a
         in map DomainElement $ foldr cartesianProduct [[]] subdomainElements
 
+-- | Dimensionable instnace.
 instance Dimensionable CompositeDomain where
     dimension (CompositeDomain a) = length a

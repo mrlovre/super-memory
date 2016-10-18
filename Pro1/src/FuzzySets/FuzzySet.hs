@@ -1,8 +1,11 @@
--- | 'FuzzySet', 'AFuzzySet'
+-- | Fuzzy set, any-Fuzzy set.
 module FuzzySets.FuzzySet where
 
 import           Domains.Domain
 import           Domains.DomainElement
+
+-- | Type of a function which determines the grade of membership for an element of the fuzzy set.
+type MembershipFunction = Int -> Double
 
 -- | Model of a fuzzy set.
 class FuzzySet a where
@@ -15,10 +18,12 @@ class FuzzySet a where
 data AFuzzySet where
     AFuzzySet :: (FuzzySet a) => a -> AFuzzySet
 
+-- | "Any" fuzzy set instance.
 instance FuzzySet AFuzzySet where
     domain (AFuzzySet a) = domain a
     valueAt (AFuzzySet a) = valueAt a
 
+-- | Show instance.
 instance Show AFuzzySet where
     show (AFuzzySet fuzzySet) = let
         d = domain fuzzySet

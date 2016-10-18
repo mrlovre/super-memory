@@ -1,3 +1,4 @@
+-- | Dimensionable.
 module Domains.Dimensionable where
 
 -- | Defines a class with a dimension property.

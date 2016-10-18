@@ -1,3 +1,4 @@
+-- | Domain, any-Domain.
 module Domains.Domain where
 
 import           Domains.Dimensionable
@@ -29,11 +30,13 @@ class (Dimensionable a) => Domain a where
 data ADomain where
      ADomain :: (Domain a) => a -> ADomain
 
+-- | Show instance.
 instance Show ADomain where
     show (ADomain domain) = let
         fromZero = [0 ..] :: [Int]
         in unlines $ zipWith (++) (map ((++ "# element: ") . show) fromZero) (map show $ iterator domain)
 
+-- | "Any" domain instance.
 instance Domain ADomain where
     cardinality (ADomain a) = cardinality a
     getComponent (ADomain a) = getComponent a
@@ -41,5 +44,6 @@ instance Domain ADomain where
     elementAtIndex (ADomain a) = elementAtIndex a
     iterator (ADomain a) = iterator a
 
+-- | Dimensionable instance.
 instance Dimensionable ADomain where
     dimension (ADomain a) = dimension a

@@ -1,3 +1,4 @@
+-- | Domain helper functions.
 module Domains.DomainHelper where
 
 import           Domains.CompositeDomain

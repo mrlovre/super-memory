@@ -61,6 +61,7 @@ demo3 = do
     print union
     print hamacherIntersection
 
+-- | Provides debug info for a domain.
 domainInfo :: (Domain a) => a -> String
 domainInfo d = unlines $
     "Domain info:" :

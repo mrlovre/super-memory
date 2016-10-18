@@ -1,25 +1,30 @@
+-- | Fuzzy set helper functions.
 module FuzzySets.FuzzySetHelper where
 
 import FuzzySets.FuzzySet
 import FuzzySets.CalculatedFuzzySet
 import Domains.Domain
 import Domains.Dimensionable
+import FuzzySets.Operations
 
-lFunctionGenerator :: Int -> Int -> Int -> Double
+-- | Generates the L-function. Takes alpha and beta parameters.
+lFunctionGenerator :: Int -> Int -> MembershipFunction
 lFunctionGenerator a b x = if
     | a > b -> error "Function is not well defined."
     | x <= a -> 1
     | x < b -> fromIntegral (b - x) / fromIntegral (b - a)
     | otherwise -> 0
 
-gammaFunctionGenerator :: Int -> Int -> Int -> Double
+-- | Generates the Gamma-function. Takes alpha and beta parameters.
+gammaFunctionGenerator :: Int -> Int -> MembershipFunction
 gammaFunctionGenerator a b x = if
     | a > b -> error "Function is not well defined."
     | x <= a -> 0
     | x < b -> fromIntegral (x - a) / fromIntegral (b - a)
     | otherwise -> 1
 
-lambdaFunctionGenerator :: Int -> Int -> Int -> Int -> Double
+-- | Generates the Lambda-function. Takes alpha, beta, and gamma parameters.
+lambdaFunctionGenerator :: Int -> Int -> Int -> MembershipFunction
 lambdaFunctionGenerator a b c x = if
     | a > b || b > c -> error "Function is not well defined."
     | x <= a -> 0
@@ -28,12 +33,14 @@ lambdaFunctionGenerator a b c x = if
     | x < c -> fromIntegral (c - x) / fromIntegral (c - b)
     | otherwise -> 0
 
-unaryOperation :: AFuzzySet -> (Double -> Double) -> AFuzzySet
+-- | Applies an unary operation to a fuzzy set.
+unaryOperation :: AFuzzySet -> UnaryFunction -> AFuzzySet
 unaryOperation fuzzySet f = let
     d = domain fuzzySet
     in AFuzzySet $ calculatedFuzzySet (f . valueAt fuzzySet . elementAtIndex d) d
 
-binaryOperation :: AFuzzySet -> AFuzzySet -> (Double -> Double -> Double) -> AFuzzySet
+-- | Applies a binary operation to a fuzzy set.
+binaryOperation :: AFuzzySet -> AFuzzySet -> BinaryFunction -> AFuzzySet
 binaryOperation a b f = let
     [da, db] = map domain [a, b]
     valueAtIndex s = valueAt s . elementAtIndex da

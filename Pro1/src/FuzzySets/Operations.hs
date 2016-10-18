@@ -1,5 +1,11 @@
--- | Provides basic unary and binary operations.
+-- | Provides various unary and binary operations.
 module FuzzySets.Operations where
+
+-- | Type of an unary function.
+type UnaryFunction = Double -> Double
+
+-- | Type of a binary function.
+type BinaryFunction = Double -> Double -> Double
 
 -- | Zadeh complement.
 zadehNot :: Double -> Double

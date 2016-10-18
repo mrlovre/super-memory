@@ -1,3 +1,4 @@
+-- | Domain element.
 module Domains.DomainElement where
 
 import           Domains.Dimensionable
@@ -18,8 +19,10 @@ extractDomainElement (DomainElement e) = e
 getComponentValue :: Int -> DomainElement -> Int
 getComponentValue n (DomainElement a) = a !! n
 
+-- | Show instance.
 instance Show DomainElement where
     show (DomainElement a) = show a
 
+-- | Dimensionable instance.
 instance Dimensionable DomainElement where
     dimension (DomainElement a) = length a

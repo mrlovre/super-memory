@@ -1,3 +1,4 @@
+-- | Simple domain.
 module Domains.SimpleDomain where
 
 import Domains.Domain
@@ -17,6 +18,7 @@ createSimpleDomain start end = if
 intRange :: Int -> Int -> SimpleDomain
 intRange a b = createSimpleDomain a (b - 1)
 
+-- | Domain instance.
 instance Domain SimpleDomain where
     cardinality (SimpleDomain start end) = end - start + 1
 
@@ -42,5 +44,6 @@ instance Domain SimpleDomain where
 
     maxElement (SimpleDomain _ end) = DomainElement [end]
 
+-- | Dimensionable instance.
 instance Dimensionable SimpleDomain where
     dimension _ = 1

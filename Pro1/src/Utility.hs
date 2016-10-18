@@ -1,3 +1,4 @@
+-- | Utility functions.
 module Utility where
 
 -- | Creates a cartesian product of two sets, i.e. pairs each element of the first set with an element of the second
