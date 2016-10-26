@@ -36,6 +36,10 @@ instance Show ADomain where
         fromZero = [0 ..] :: [Int]
         in unlines $ zipWith (++) (map ((++ "# element: ") . show) fromZero) (map show $ iterator domain)
 
+-- | Equality instance.
+instance Eq ADomain where
+    d1 == d2 = dimension d1 == dimension d2 && and (zipWith (==) (iterator d1) (iterator d2))
+
 -- | "Any" domain instance.
 instance Domain ADomain where
     cardinality (ADomain a) = cardinality a

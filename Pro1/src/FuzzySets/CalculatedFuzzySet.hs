@@ -17,7 +17,7 @@ calculatedFuzzySet :: (Int -> Double) -> ADomain -> CalculatedFuzzySet
 calculatedFuzzySet f d =
     CalculatedFuzzySet d (V.fromList $ map f [0 .. cardinality d - 1])
 
--- | Fuzzy set instance
+-- | Fuzzy set instance.
 instance FuzzySet CalculatedFuzzySet where
     domain (CalculatedFuzzySet d _) = d
     valueAt (CalculatedFuzzySet d m) v = let

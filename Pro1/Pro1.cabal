@@ -14,3 +14,14 @@ executable Pro1
   default-language:    Haskell2010
   default-extensions:  GADTs, MultiWayIf
   ghc-options:         -Wall
+
+library
+  build-depends:       base >=4.9 && <4.10, mtl >=2.2 && <2.3, vector >=0.11 && <0.12
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+  default-extensions:  GADTs, MultiWayIf
+  ghc-options:         -Wall
+  exposed-modules:     Domains.Domain, Domains.CompositeDomain, Domains.SimpleDomain, Domains.DomainElement
+                       Domains.Dimensionable, Domains.DomainHelper,
+                       FuzzySets.FuzzySet, FuzzySets.CalculatedFuzzySet, FuzzySets.MutableFuzzySet,
+                       FuzzySets.Operations, FuzzySets.FuzzySetHelper
