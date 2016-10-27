@@ -25,3 +25,4 @@ library
                        Domains.Dimensionable, Domains.DomainHelper,
                        FuzzySets.FuzzySet, FuzzySets.CalculatedFuzzySet, FuzzySets.MutableFuzzySet,
                        FuzzySets.Operations, FuzzySets.FuzzySetHelper
+  other-modules:       Utility, Main

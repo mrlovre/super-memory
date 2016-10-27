@@ -37,7 +37,7 @@ instance Domain CompositeDomain where
                 error "Domain element is not of equal dimension as the domain."
             | or $ zipWith (\ x y -> x < 0 || x >= y) normalizedIndices cardinalities ->
                 error "Domain element is not contained in the domain."
-            | otherwise -> sum (zipWith (*) normalizedIndices (tail cardinalities)) + lastDimension
+            | otherwise -> sum (zipWith (*) normalizedIndices (tail cardinalities)) + lastDimension - 1
 
     elementAtIndex domain@(CompositeDomain a) n = let
         cardinalities = map cardinality a
