@@ -26,12 +26,12 @@ instance Domain CompositeDomain where
         | n < 0 || n >= dimension domain -> error "Component number out of range."
         | otherwise -> ADomain $ a !! n
 
-    indexOfElement domain@(CompositeDomain a) domainElement@(DomainElement b) = let
+    indexOfElement domain@(CompositeDomain a) de@(DomainElement b) = let
         cardinalities = map cardinality a
         startElements = map (\ (SimpleDomain start _) -> start) a
         normalizedIndices = zipWith (-) b startElements
-        domainElementDimension = dimension domainElement
-        lastDimension = getComponentValue (domainElementDimension - 1) domainElement
+        domainElementDimension = dimension de
+        lastDimension = getComponentValue (domainElementDimension - 1) de
         in if
             | domainElementDimension /= dimension domain ->
                 error "Domain element is not of equal dimension as the domain."
@@ -52,6 +52,6 @@ instance Domain CompositeDomain where
         subdomainElements = map (map extractDomainElement . iterator) a
         in map DomainElement $ foldr cartesianProduct [[]] subdomainElements
 
--- | Dimensionable instnace.
+-- | Dimensionable instance.
 instance Dimensionable CompositeDomain where
     dimension (CompositeDomain a) = length a

@@ -23,13 +23,12 @@ instance Domain SimpleDomain where
     cardinality (SimpleDomain start end) = end - start + 1
 
     getComponent domain 0 = ADomain domain
-
     getComponent _ _      = error "Simple domain contains only one component."
 
-    indexOfElement domain@(SimpleDomain start end) domainElement = let
-        e = getComponentValue 0 domainElement
+    indexOfElement domain@(SimpleDomain start end) de = let
+        e = getComponentValue 0 de
         in if
-            | dimension domainElement /= dimension domain ->
+            | dimension de /= dimension domain ->
                 error "Domain element is not of equal dimension as the domain."
             | e < start || e > end -> error "Domain element is not contained in the domain."
             | otherwise -> e - start

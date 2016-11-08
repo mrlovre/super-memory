@@ -1,4 +1,4 @@
-name:                Pro2
+name:                Pro3
 version:             0.1.0.0
 license:             BSD3
 license-file:        LICENSE
@@ -8,19 +8,10 @@ build-type:          Simple
 extra-source-files:  ChangeLog.md
 cabal-version:       >=1.10
 
-executable Pro2
+executable Pro3
   main-is:             Main.hs
-  build-depends:       base >=4.9 && <4.10, Pro1
+  build-depends:       base >=4.9 && <4.10, Pro1, Pro2
   hs-source-dirs:      src
   default-language:    Haskell2010
   default-extensions:  GADTs, MultiWayIf
   ghc-options:         -Wall
-
-library
-  build-depends:       base >=4.9 && <4.10, Pro1
-  hs-source-dirs:      src
-  default-language:    Haskell2010
-  default-extensions:  GADTs, MultiWayIf
-  ghc-options:         -Wall
-  exposed-modules:     Relations.Relation, Relations.RelationHelper
-  other-modules:       Utility, Main
