@@ -1,5 +1,6 @@
 module Rules.Rule where
 
+import           FuzzySets.CalculatedFuzzySet
 import           FuzzySets.FuzzySet
 
 type Rule = AFuzzySet

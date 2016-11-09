@@ -4,6 +4,7 @@ import           Defuzzifiers.COADefuzzifier
 import           Defuzzifiers.Defuzzifier
 import           FuzzySystems.AccelFuzzySystemMin
 import           FuzzySystems.FuzzySystem
+import           FuzzySystems.FuzzySystemHelper
 import           FuzzySystems.RudderFuzzySystemMin
 
 import           Control.Monad
@@ -15,7 +16,7 @@ main = do
         fsAccel = AFuzzySystem $ accelFuzzySystemMin defuzzifier
         fsRudder = AFuzzySystem $ rudderFuzzySystemMin defuzzifier
     forever $ do
-        inputs <- readDoubles
+        inputs <- variablesForBoatSystem <$> readDoubles
         let outputs = map (`conclude` inputs) [fsAccel, fsRudder]
         putStrLn $ unwords $ map show outputs
         undefined

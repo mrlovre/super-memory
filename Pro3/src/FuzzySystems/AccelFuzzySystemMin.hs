@@ -1,9 +1,11 @@
 module FuzzySystems.AccelFuzzySystemMin where
 
-import FuzzySystems.FuzzySystem
-import Defuzzifiers.Defuzzifier
+import           Defuzzifiers.Defuzzifier
+import           FuzzySystems.FuzzySystem
+import           Rules.Rule
 
 data AccelFuzzySystemMin where
+    AccelFuzzySystemMin :: [Rule] -> AccelFuzzySystemMin
 
 instance FuzzySystem AccelFuzzySystemMin where
 
