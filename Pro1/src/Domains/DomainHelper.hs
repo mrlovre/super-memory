@@ -11,7 +11,7 @@ import           Control.Monad
 
 -- | Creates a 'SimpleDomain' containing range from a (inclusive) to b (exclusive).
 intRange :: Int -> Int -> SimpleDomain
-intRange a b = createSimpleDomain a (b - 1)
+intRange a b = simpleDomain a (b - 1)
 
 -- | Creates a 'CompositeDomain' as a CartesianProduct of supplied domains.
 combine :: (Domain a) => [a] -> CompositeDomain

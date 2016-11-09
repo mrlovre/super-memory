@@ -14,9 +14,9 @@ data CompositeDomain where
     CompositeDomain :: [SimpleDomain] -> CompositeDomain
 
 -- | Constructor for 'CompositeDomain'.
-createCompositeDomain :: [SimpleDomain] -> CompositeDomain
-createCompositeDomain [] = error "Composite domain must contain at least one component."
-createCompositeDomain other = CompositeDomain other
+compositeDomain :: [SimpleDomain] -> CompositeDomain
+compositeDomain [] = error "Composite domain must contain at least one component."
+compositeDomain other = CompositeDomain other
 
 -- | Domain instance.
 instance Domain CompositeDomain where

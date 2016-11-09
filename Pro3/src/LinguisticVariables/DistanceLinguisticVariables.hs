@@ -2,12 +2,13 @@ module LinguisticVariables.DistanceLinguisticVariables where
 
 import           Domains.Domain
 import           Domains.DomainElement
+import           Domains.SimpleDomain
 import           FuzzySets.CalculatedFuzzySet
 import           FuzzySets.FuzzySet
 import           FuzzySets.FuzzySetHelper
 
 distance :: ADomain
-distance = undefined
+distance = ADomain $ simpleDomain 0 1300
 
 zeroDistanceI :: Int
 zeroDistanceI = indexOfElement distance $ domainElement [0]

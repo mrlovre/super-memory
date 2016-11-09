@@ -48,3 +48,14 @@ binaryOperation a b f = let
         | dimension da /= dimension db || cardinality da /= cardinality db ->
             error "Incompatible domains for binary operation."
         | otherwise -> AFuzzySet $ calculatedFuzzySet (\ i -> f (valueAtIndex a i) (valueAtIndex b i)) da
+
+constantFuzzySet :: Double -> ADomain -> AFuzzySet
+constantFuzzySet m = if
+    | m < 0 || m > 1 -> error "Membership grade must be between 0 and 1."
+    | otherwise -> AFuzzySet . calculatedFuzzySet (const m)
+
+emptyFuzzySet :: ADomain -> AFuzzySet
+emptyFuzzySet = constantFuzzySet 0
+
+universalFuzzySet :: ADomain -> AFuzzySet
+universalFuzzySet = constantFuzzySet 1

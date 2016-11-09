@@ -1,4 +1,4 @@
 module Utility where
 
-readDoubles :: IO [Double]
-readDoubles = map read . words <$> getLine
+readInts :: IO [Int]
+readInts = map read . words <$> getLine

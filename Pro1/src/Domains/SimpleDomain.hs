@@ -9,14 +9,14 @@ import Domains.DomainElement
 data SimpleDomain = SimpleDomain Int Int
 
 -- | Constructor for 'SimpleDomain'.
-createSimpleDomain :: Int -> Int -> SimpleDomain
-createSimpleDomain start end = if
+simpleDomain :: Int -> Int -> SimpleDomain
+simpleDomain start end = if
     | start > end -> error "Domain start must be less than or equal to the domain end."
     | otherwise -> SimpleDomain start end
 
 -- | Creates a 'SimpleDomain' containing range from a (inclusive) to b (exclusive).
 intRange :: Int -> Int -> SimpleDomain
-intRange a b = createSimpleDomain a (b - 1)
+intRange a b = simpleDomain a (b - 1)
 
 -- | Domain instance.
 instance Domain SimpleDomain where
