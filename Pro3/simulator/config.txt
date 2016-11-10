@@ -1,0 +1,4 @@
+../dist/build/Pro3/Pro3
+2
+20
+10

@@ -8,7 +8,7 @@ import           FuzzySets.FuzzySet
 import           FuzzySets.FuzzySetHelper
 
 acceleration :: ADomain
-acceleration = ADomain $ simpleDomain (-200) 200
+acceleration = ADomain $ simpleDomain (-40) 40
 
 accelerationDomainIndex :: Int -> Int
 accelerationDomainIndex e = indexOfElement acceleration $ domainElement [e]
@@ -17,19 +17,25 @@ neutralAccelI :: Int
 neutralAccelI = accelerationDomainIndex 0
 
 topAccelI :: Int
-topAccelI = accelerationDomainIndex 100
+topAccelI = accelerationDomainIndex 40
 
 brakeI :: Int
-brakeI = accelerationDomainIndex (-100)
+brakeI = accelerationDomainIndex (-40)
 
 normalAccelI :: Int
-normalAccelI = accelerationDomainIndex 20
+normalAccelI = accelerationDomainIndex 5
 
 accelerationFuzzySet :: MembershipFunction -> AFuzzySet
 accelerationFuzzySet f = AFuzzySet $ calculatedFuzzySet f acceleration
+
+brake :: AFuzzySet
+brake = accelerationFuzzySet $ lFunctionGenerator brakeI neutralAccelI
 
 topAccel :: AFuzzySet
 topAccel = accelerationFuzzySet $ gammaFunctionGenerator normalAccelI topAccelI
 
 weakAccel :: AFuzzySet
 weakAccel = accelerationFuzzySet $ lambdaFunctionGenerator neutralAccelI normalAccelI topAccelI
+
+neutralAccel :: AFuzzySet
+neutralAccel = accelerationFuzzySet $ lambdaFunctionGenerator (accelerationDomainIndex (-5)) neutralAccelI (accelerationDomainIndex 5)

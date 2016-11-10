@@ -2,7 +2,6 @@ module Rules.Rule where
 
 import           Configuration
 import           Domains.DomainElement
-import           FuzzySets.CalculatedFuzzySet
 import           FuzzySets.FuzzySet
 import           FuzzySets.FuzzySetHelper
 import           FuzzySystems.FuzzySystemHelper
@@ -17,4 +16,4 @@ makeRule antecedent consequent = let
     total = foldl tNorm 1 memberships
     consequentDomain = domain consequent
     antecedentFuzzySet = constantFuzzySet total consequentDomain
-    in AFuzzySet $ binaryOperation antecedentFuzzySet consequent sNorm
+    in AFuzzySet $ binaryOperation antecedentFuzzySet consequent tNorm

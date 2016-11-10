@@ -10,20 +10,26 @@ import           FuzzySets.FuzzySetHelper
 distance :: ADomain
 distance = ADomain $ simpleDomain 0 1300
 
-zeroDistanceI :: Int
-zeroDistanceI = indexOfElement distance $ domainElement [0]
+distanceDomainIndex :: Int -> Int
+distanceDomainIndex e = indexOfElement distance $ domainElement [e]
 
 criticalDistanceI :: Int
-criticalDistanceI = indexOfElement distance $ domainElement [25]
+criticalDistanceI = distanceDomainIndex 40
+
+closeDistanceI :: Int
+closeDistanceI = distanceDomainIndex 60
 
 farDistanceI :: Int
-farDistanceI = indexOfElement distance $ domainElement [80]
+farDistanceI = distanceDomainIndex 80
 
-farthestDistanceI :: Int
-farthestDistanceI = indexOfElement distance $ domainElement [100]
+distanceFuzzySet :: MembershipFunction -> AFuzzySet
+distanceFuzzySet f = AFuzzySet $ calculatedFuzzySet f distance
 
 criticallyCloseDistance :: AFuzzySet
-criticallyCloseDistance = AFuzzySet $ calculatedFuzzySet (lFunctionGenerator zeroDistanceI criticalDistanceI) distance
+criticallyCloseDistance = distanceFuzzySet $ lFunctionGenerator criticalDistanceI closeDistanceI
+
+closeDistance :: AFuzzySet
+closeDistance = distanceFuzzySet $ lambdaFunctionGenerator criticalDistanceI closeDistanceI farDistanceI
 
 farDistance :: AFuzzySet
-farDistance = AFuzzySet $ calculatedFuzzySet (gammaFunctionGenerator farDistanceI farthestDistanceI) distance
+farDistance = distanceFuzzySet $ gammaFunctionGenerator closeDistanceI farDistanceI

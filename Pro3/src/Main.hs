@@ -8,7 +8,8 @@ import           FuzzySystems.FuzzySystemHelper
 import           FuzzySystems.RudderFuzzySystemMin
 
 import           Control.Monad
-import           Utility
+import           System.Exit
+import           System.IO
 
 main :: IO ()
 main = do
@@ -16,8 +17,9 @@ main = do
         fsAccel = AFuzzySystem $ accelFuzzySystemMin defuzzifier
         fsRudder = AFuzzySystem $ rudderFuzzySystemMin defuzzifier
     forever $ do
-        inputs <- variablesForBoatSystem <$> readInts
-        --let outputs = map (`conclude` inputs) [fsAccel, fsRudder]
-        let outputs = [0, 0]
+        line <- getLine
+        when (line == "KRAJ") exitSuccess
+        let inputs = variablesForBoatSystem $ map read $ words line
+            outputs = map (`conclude` inputs) [fsAccel, fsRudder]
         putStrLn $ unwords $ map show outputs
-        undefined
+        hFlush stdout
