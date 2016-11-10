@@ -23,7 +23,7 @@ brakeI :: Int
 brakeI = accelerationDomainIndex (-40)
 
 normalAccelI :: Int
-normalAccelI = accelerationDomainIndex 5
+normalAccelI = accelerationDomainIndex 8
 
 accelerationFuzzySet :: MembershipFunction -> AFuzzySet
 accelerationFuzzySet f = AFuzzySet $ calculatedFuzzySet f acceleration

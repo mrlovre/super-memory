@@ -14,13 +14,13 @@ distanceDomainIndex :: Int -> Int
 distanceDomainIndex e = indexOfElement distance $ domainElement [e]
 
 criticalDistanceI :: Int
-criticalDistanceI = distanceDomainIndex 40
+criticalDistanceI = distanceDomainIndex 30
 
 closeDistanceI :: Int
-closeDistanceI = distanceDomainIndex 60
+closeDistanceI = distanceDomainIndex 50
 
 farDistanceI :: Int
-farDistanceI = distanceDomainIndex 80
+farDistanceI = distanceDomainIndex 100
 
 distanceFuzzySet :: MembershipFunction -> AFuzzySet
 distanceFuzzySet f = AFuzzySet $ calculatedFuzzySet f distance
