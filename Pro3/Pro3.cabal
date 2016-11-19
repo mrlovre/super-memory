@@ -9,9 +9,23 @@ extra-source-files:  ChangeLog.md
 cabal-version:       >=1.10
 
 executable Pro3
-  main-is:             Main.hs
-  build-depends:       base >=4.9 && <4.10, containers >=0.5 && <0.6, Pro1, Pro2
-  hs-source-dirs:      src
-  default-language:    Haskell2010
-  default-extensions:  GADTs, MultiWayIf
-  ghc-options:         -Wall
+    main-is:             Main.hs
+    hs-source-dirs:      src
+    build-depends:       base >=4.9 && <4.10, containers >=0.5 && <0.6, Pro1, Pro2
+    default-language:    Haskell2010
+    default-extensions:  GADTs, MultiWayIf
+    ghc-options:         -Wall
+
+library
+    build-depends:       base >=4.9 && <4.10, containers >=0.5 && <0.6, Pro1, Pro2
+    hs-source-dirs:      src
+    default-language:    Haskell2010
+    default-extensions:  GADTs, MultiWayIf
+    ghc-options:         -Wall
+    exposed-modules:     Defuzzifiers.Defuzzifier, Defuzzifiers.COADefuzzifier, FuzzySystems.FuzzySystem,
+                         FuzzySystems.FuzzySystemHelper, LinguisticVariables.LinguisticVariableHelper
+                         Rules.Rule
+    other-modules:       Utility, Main, Configuration, FuzzySystems.AccelFuzzySystemMin,
+                         FuzzySystems.RudderFuzzySystemMin, LinguisticVariables.AccelLinguisticVariables,
+                         LinguisticVariables.AngleLinguisticVariables, LinguisticVariables.DistanceLinguisticVariables,
+                         LinguisticVariables.SpeedLinguisticVariables

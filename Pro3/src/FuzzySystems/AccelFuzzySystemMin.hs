@@ -21,22 +21,22 @@ accelFuzzySystemMin :: ADefuzzifier -> AccelFuzzySystemMin
 accelFuzzySystemMin defuzzifier = AccelFuzzySystemMin defuzzifier acceleration accelRuleset
 
 accelRuleset :: Ruleset
-accelRuleset = [accelRule1, accelRule2, accelRule3, accelRule4, accelRule5, accelRule6]
+accelRuleset = [accelRule1, accelRule2, accelRule3, accelRule4, accelRule5, accelRule6, accelRule7, accelRule8]
 
 accelRule1 :: Rule
 accelRule1 vars = let
-    [l, d, lk, dk, v] = getVariables vars ["l", "d", "lk", "dk", "v"]
-    in makeRule [(l, farDistance), (d, farDistance), (lk, farDistance), (dk, farDistance), (v, lvNot fastSpeed)] weakAccel
+    [l, d, v] = getVariables vars ["l", "d", "v"]
+    in makeRule [(l, farDistance), (d, farDistance), (v, lvNot fastSpeed)] weakAccel
 
 accelRule2 :: Rule
 accelRule2 vars = let
-     [l, lk, v] = getVariables vars ["l", "lk", "v"]
-     in makeRule [(l, closeDistance), (lk, closeDistance), (v, fastSpeed)] brake
+    [l, lk, v] = getVariables vars ["l", "lk", "v"]
+    in makeRule [(lk, closeDistance), (v, fastSpeed)] brake
 
 accelRule3 :: Rule
 accelRule3 vars = let
     [d, dk, v] = getVariables vars ["d", "dk", "v"]
-    in makeRule [(d, closeDistance), (dk, closeDistance), (v, fastSpeed)] brake
+    in makeRule [(dk, closeDistance), (v, fastSpeed)] brake
 
 accelRule4 :: Rule
 accelRule4 vars = let
@@ -51,4 +51,14 @@ accelRule5 vars = let
 accelRule6 :: Rule
 accelRule6 vars = let
     [v] = getVariables vars ["v"]
-    in makeRule [(v, fastSpeed)] neutralAccel
+    in makeRule [(v, fastSpeed)] slightDeccel
+
+accelRule7 :: Rule
+accelRule7 vars = let
+    [v] = getVariables vars ["v"]
+    in makeRule [(v, lvVery topSpeed)] slightDeccel
+
+accelRule8 :: Rule
+accelRule8 vars = let
+    [v] = getVariables vars ["v"]
+    in makeRule [(v, lvMoreOrLess idle)] topAccel

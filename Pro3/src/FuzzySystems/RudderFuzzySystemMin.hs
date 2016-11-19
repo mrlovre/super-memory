@@ -20,27 +20,37 @@ rudderFuzzySystemMin :: ADefuzzifier -> RudderFuzzySystemMin
 rudderFuzzySystemMin defuzzifier = RudderFuzzySystemMin defuzzifier angle rudderRuleset
 
 rudderRuleset :: Ruleset
-rudderRuleset = [rudderRule1, rudderRule2, rudderRule3, rudderRule4, rudderRule5]
+rudderRuleset = [rudderRule1a, rudderRule1b, rudderRule2a, rudderRule2b, rudderRule5]
 
-rudderRule1 :: Rule
-rudderRule1 vars = let
-    [l, lk] = getVariables vars ["l", "lk"]
-    in makeRule [(l, criticallyCloseDistance), (lk, criticallyCloseDistance)] sharpRightAngle
+rudderRule1a :: Rule
+rudderRule1a vars = let
+    [lk, d, dk] = getVariables vars ["lk", "d", "dk"]
+    in makeRule [(lk, closeDistance), (d, lvNot criticallyCloseDistance), (dk, lvNot closeDistance) ] $ lvVery sharpRightAngle
 
-rudderRule2 :: Rule
-rudderRule2 vars = let
-    [d, dk] = getVariables vars ["d", "dk"]
-    in makeRule [(d, criticallyCloseDistance), (dk, criticallyCloseDistance)] sharpLeftAngle
+rudderRule1b :: Rule
+rudderRule1b vars = let
+    [l, d, dk] = getVariables vars ["l", "d", "dk"]
+    in makeRule [(l, criticallyCloseDistance), (d, lvNot criticallyCloseDistance), (dk, lvNot closeDistance)] $ lvVery sharpRightAngle
+
+rudderRule2a :: Rule
+rudderRule2a vars = let
+    [dk, l, lk] = getVariables vars ["dk", "l", "lk"]
+    in makeRule [(dk, closeDistance), (l, lvNot criticallyCloseDistance), (lk, lvNot closeDistance)] $ lvVery sharpLeftAngle
+
+rudderRule2b :: Rule
+rudderRule2b vars = let
+    [d, l, lk] = getVariables vars ["d", "l", "lk"]
+    in makeRule [(d, criticallyCloseDistance), (l, lvNot criticallyCloseDistance), (lk, lvNot closeDistance)] $ lvVery sharpLeftAngle
 
 rudderRule3 :: Rule
 rudderRule3 vars = let
     [l, lk] = getVariables vars ["l", "lk"]
-    in makeRule [(l, closeDistance), (lk, closeDistance)] sharpRightAngle
+    in makeRule [(l, closeDistance), (lk, closeDistance)] $ lvVery rightAngle
 
 rudderRule4 :: Rule
 rudderRule4 vars = let
     [d, dk] = getVariables vars ["d", "dk"]
-    in makeRule [(d, closeDistance), (dk, closeDistance)] sharpLeftAngle
+    in makeRule [(d, closeDistance), (dk, closeDistance)] $ lvVery leftAngle
 
 rudderRule5 :: Rule
 rudderRule5 vars = let
