@@ -20,6 +20,8 @@ sqDist x1 x2 = (x1 - x2) ** 2
 
 type Dataset = [((Double, Double), Double)]
 
+type Score = Double
+
 readDataset :: FilePath -> IO Dataset
 readDataset path = do
     contents <- readFile path
@@ -29,5 +31,20 @@ readDataset path = do
             in ((x, y), z)
     return parsed
 
-sortByScore :: [(Double, b)] -> [(Double, b)]
+sortByScore :: [(Score, b)] -> [(Score, b)]
 sortByScore = sortBy (comparing fst)
+
+nubByScore :: [(Score, b)] -> [(Score, b)]
+nubByScore = nubBy (\ s1 s2 -> comparing fst s1 s2 == EQ)
+
+minimumByScore :: [(Score, b)] -> (Score, b)
+minimumByScore = minimumBy (comparing fst)
+
+holdBest :: [(Score, b)] -> [(Int, (Score, b))]
+holdBest [] = []
+holdBest (l : ls) = let
+    go _ [] = []
+    go bestScore ((ind, m@(score, _)) : ms) = if
+        | bestScore <= score -> go bestScore ms
+        | otherwise -> (ind, m) : go score ms
+    in (0, l) : go (fst l) (zip [1 ..] ls)

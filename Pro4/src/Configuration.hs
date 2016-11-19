@@ -10,7 +10,10 @@ chromosomeParameterBounds :: (Double, Double)
 chromosomeParameterBounds = (-4, 4)
 
 maxIter :: Int
-maxIter = 1000
+maxIter = 100000
 
 mutationRate :: Double
 mutationRate = 0.1
+
+mutationMagnitude :: Double
+mutationMagnitude = 0.1

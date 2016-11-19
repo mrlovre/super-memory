@@ -5,11 +5,16 @@ import           Utility
 
 import           Control.Monad
 import           Control.Monad.Random
+import           Data.List
 
 data Chromosome where
     Chromosome :: { b0 :: Double, b1 :: Double, b2 :: Double, b3 :: Double, b4 :: Double } -> Chromosome
 
-deriving instance Show Chromosome
+instance Show Chromosome where
+    show Chromosome{ .. } = "Chromosome:\n  { "
+        ++ intercalate ",  " (zipWith (++) ["b0 = ", "b1 = ", "b2 = ", "b3 = ", "b4 = "] (map show [b0, b1, b2, b3, b4]))
+        ++ " }"
+
 deriving instance Eq Chromosome
 
 type Population = [Chromosome]
@@ -30,7 +35,7 @@ mutate p c = do
     [b0, b1, b2, b3, b4] <- forM (zip chances params) $
         \ (chance, param) -> if
             | chance < p -> do
-                mutation <- (* 0.1) . (+ negate 0.5) <$> getChance
+                mutation <- (* Configuration.mutationMagnitude) . (+ negate 0.5) <$> getChance
                 return $ param + mutation
             | otherwise -> return param
     return Chromosome{ .. }
@@ -43,7 +48,7 @@ cross c1 c2 = do
         [b0, b1, b2, b3, b4] = for (zip3 chances paramsC1 paramsC2) $
             \ (chance, paramC1, paramC2) -> if
                 | chance < mixThr -> paramC1
-                | chance < 1 - mixThr -> (1 - chance) * paramC1 + chance * paramC2
+                | chance < 1 - mixThr -> paramC1 + (1.1 * (chance - mixThr) - 0.55 * (0.5 - mixThr)) * (paramC2 - paramC1) / (1 - 2 * mixThr)
                 | otherwise -> paramC2
     return Chromosome{ .. }
 
