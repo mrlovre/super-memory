@@ -4,7 +4,7 @@ populationSize :: Int
 populationSize = 100
 
 crossingMixThreshold :: Double
-crossingMixThreshold = 0.25
+crossingMixThreshold = 0.4
 
 chromosomeParameterBounds :: (Double, Double)
 chromosomeParameterBounds = (-4, 4)
