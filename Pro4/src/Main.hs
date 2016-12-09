@@ -9,13 +9,13 @@ import           Control.Monad
 import           Control.Monad.Random
 
 datasetPath :: FilePath
-datasetPath = "/home/frka/haskell/NENR/Pro4/datasets/dataset1"
+datasetPath = "/home/frka/haskell/NENR/Pro4/datasets/dataset2"
 
 main :: IO ()
 main = do
     population <- evalRandIO $ replicateM Configuration.populationSize randomChromosome
     dataset <- readDataset datasetPath
-    bests <- evalRandIO $ eliminationAlgorithm dataset Configuration.maxIter population
+    bests <- evalRandIO $ generationAlgorithm True dataset Configuration.maxIter population
     putStrLn $ unlines $ map prettyPrint $ holdBest bests
 
 prettyPrint :: (Int, (Score, Chromosome)) -> String

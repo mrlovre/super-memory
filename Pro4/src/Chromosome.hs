@@ -58,4 +58,3 @@ evaluate Chromosome{ .. } (x, y) = let
     cs = b2 * cos (x * (b3 + y))
     ex = 1 / (1 + exp ((x - b4) ** 2))
     in sn + cs * ex
-
