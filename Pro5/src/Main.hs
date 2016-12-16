@@ -21,9 +21,12 @@ type DecimalPoint = (Double, Double)
 data Variables = Variables {
     tempPoints :: IORef [Point],
     selectedGesture :: IORef String,
-    gestures :: IORef (Map String [DecimalPoint]),
+    gestures :: IORef (Map String [[DecimalPoint]]),
     gestureTabs :: IORef (Map String Button)
 }
+
+decimationFactor :: Int
+decimationFactor = 10
 
 initVariables :: IO Variables
 initVariables = do
@@ -83,28 +86,8 @@ main = do
         text <- entryGetText gestureEntry
         gestureTabsV <- get $ gestureTabs variables
         unless (any ($ text) [null, (`S.member` M.keysSet gestureTabsV)]) $ do
-            gestureButton <- buttonNewWithLabel text
             gestureEntry `entrySetText` ""
-            gestureRemoveButton <- buttonNew
-            trashImage <- imageNewFromStock stockDelete IconSizeButton
-            gestureRemoveButton `buttonSetImage` trashImage
-            gestureButtonBox <- hBoxNew False 0
-            scrolledWindowBox `containerAdd` gestureButtonBox
-            gestureButtonBox `containerAdd` gestureButton
-            gestureButtonBox `containerAdd` gestureRemoveButton
-            gestureButtonBox `set` [boxChildPacking gestureButton := PackGrow,
-                                    boxChildPacking gestureRemoveButton := PackNatural]
-            (gestureButton `onClicked`) $ selectedGesture variables $= text
-            (gestureButton `onDestroy`) $ do
-                widgetDestroy gestureRemoveButton
-                widgetDestroy gestureButtonBox
-            (gestureRemoveButton `onClicked`) $ do
-                widgetDestroy gestureButton
-                gestures variables $~ M.delete text
-                gestureTabs variables $~ M.delete text
-            (scrolledWindowBox `boxSetChildPacking` gestureButtonBox) PackNatural 0 PackStart
-            gestureTabs variables $~ M.insert text gestureButton
-            widgetShowAll scrolledWindowBox
+            createGestureBox text scrolledWindowBox variables
     buttonBox <- hButtonBoxNew
     sideBox `containerAdd` buttonBox
     buttonBox `set` [buttonBoxLayoutStyle := ButtonboxCenter]
@@ -115,19 +98,26 @@ main = do
 
     buttonOpen <- buttonNewWithLabel "Open"
     buttonBox `containerAdd` buttonOpen
-    (buttonOpen `onClicked`) $
-        putStrLn "Clicked"
-
-    buttonSave <- buttonNewWithLabel "Save"
-    buttonBox `containerAdd` buttonSave
-    (buttonSave `onClicked`) $ do
+    (buttonOpen `onClicked`) $ do
         fileChooserDialog <- fileChooserDialogNew Nothing (Just window) FileChooserActionOpen
                 [(stockCancel, ResponseCancel), (stockOpen, ResponseAccept)]
         dialogRun fileChooserDialog
         result <- fileChooserGetFilename fileChooserDialog
         case result of
-            Just fileName -> putStrLn fileName
-            Nothing -> putStrLn "Nije ništa izabrano."
+            Just fileName -> loadFile variables fileName
+            Nothing -> return ()
+        widgetDestroy fileChooserDialog
+
+    buttonSave <- buttonNewWithLabel "Save"
+    buttonBox `containerAdd` buttonSave
+    (buttonSave `onClicked`) $ do
+        fileChooserDialog <- fileChooserDialogNew Nothing (Just window) FileChooserActionSave
+                [(stockCancel, ResponseCancel), (stockOpen, ResponseAccept)]
+        dialogRun fileChooserDialog
+        result <- fileChooserGetFilename fileChooserDialog
+        case result of
+            Just fileName -> saveFile variables fileName
+            Nothing -> return ()
         widgetDestroy fileChooserDialog
 
     (drawingArea `widgetSetSizeRequest`) 600 600
@@ -140,11 +130,9 @@ main = do
 
     drawingArea `on` buttonReleaseEvent $ do
         liftIO $ do
-            tempPointsV <- normalizeData . nub <$> get (tempPoints variables)
+            tempPointsV <- normalizeData . decimateData decimationFactor . nub <$> get (tempPoints variables)
             selectedGestureV <- get $ selectedGesture variables
-            gestures variables $~ M.insertWith (++) selectedGestureV tempPointsV
-            buttonx <- buttonNewWithLabel "TEST"
-            scrolledWindowBox `containerAdd` buttonx
+            unless (null selectedGestureV) $ gestures variables $~ M.insertWith (++) selectedGestureV [tempPointsV]
             widgetShowAll window
         return True
 
@@ -161,20 +149,87 @@ main = do
         drawWindowClear drawWindow
         gc <- gcNew drawWindow
         tempPointsV <- get (tempPoints variables)
-        (drawWindow `drawLines` gc) tempPointsV
+        (drawWindow `drawLines` gc) $ decimateData decimationFactor tempPointsV
         return True
+
+    trainingBox <- vBoxNew False 6
+    (notebook `notebookAppendPage` trainingBox) "Training"
+
+    algorithmLabel <- labelNew $ Just "Algorithm:"
+    trainingBox `containerAdd` algorithmLabel
+
+    algorithmComboBox <- comboBoxNewText
+    trainingBox `containerAdd` algorithmComboBox
+
+    architectureLabel <- labelNew $ Just "Network architecture:"
+    trainingBox `containerAdd` architectureLabel
+
+    architectureEntry <- entryNew
+    trainingBox `containerAdd` architectureEntry
+
+    trainButton <- buttonNewWithLabel "Train"
+    trainingBox `containerAdd` trainButton
+
+    trainingBox `set` [boxChildPacking algorithmLabel := PackNatural,
+                       boxChildPacking algorithmComboBox := PackNatural,
+                       boxChildPacking architectureLabel := PackNatural,
+                       boxChildPacking architectureEntry := PackNatural,
+                       boxChildPacking trainButton := PackNatural]
+
+    testingBox <- vBoxNew False 6
+    (notebook `notebookAppendPage` testingBox) "Testing"
 
     onDestroy window mainQuit
     widgetShowAll window
     mainGUI
 
+createGestureBox :: BoxClass self => String -> self -> Variables -> IO ()
+createGestureBox text parent variables = do
+    gestureButton <- buttonNewWithLabel text
+    gestureRemoveButton <- buttonNew
+    trashImage <- imageNewFromStock stockDelete IconSizeButton
+    gestureRemoveButton `buttonSetImage` trashImage
+    gestureButtonBox <- hBoxNew False 0
+    parent `containerAdd` gestureButtonBox
+    gestureButtonBox `containerAdd` gestureButton
+    gestureButtonBox `containerAdd` gestureRemoveButton
+    gestureButtonBox `set` [boxChildPacking gestureButton := PackGrow,
+                            boxChildPacking gestureRemoveButton := PackNatural]
+    (gestureButton `onClicked`) $ selectedGesture variables $= text
+    (gestureButton `onDestroy`) $ do
+        widgetDestroy gestureRemoveButton
+        widgetDestroy gestureButtonBox
+    (gestureRemoveButton `onClicked`) $ do
+        widgetDestroy gestureButton
+        gestures variables $~ M.delete text
+        gestureTabs variables $~ M.delete text
+    (parent `boxSetChildPacking` gestureButtonBox) PackNatural 0 PackStart
+    gestureTabs variables $~ M.insert text gestureButton
+    widgetShowAll parent
+
 normalizeData :: [Point] -> [DecimalPoint]
 normalizeData points = let
     (m, n) = join (***) fromIntegral . (maximum &&& minimum) $ concatMap flattenTuple points
     flattenTuple (a, b) = [a, b]
-    (meanX, meanY) = join (***) fromIntegral $ foldl (\ (a, b) (c, d) -> (a + c, b + d)) (0, 0) points
+    (meanX, meanY) = join (***) (/ fromIntegral (length points)) . join (***) fromIntegral $
+            foldl (\ (a, b) (c, d) -> (a + c, b + d)) (0, 0) points
     in map (\ (x, y) -> ((fromIntegral x - meanX) / (m - n), (fromIntegral y - meanY) / (m - n))) points
 
-scaleData :: Double -> Double -> [DecimalPoint] -> [Point]
-scaleData scale offset =
-    map (join (***) (round . (+ offset) . (* scale)))
+decimateData :: Int -> [Point] -> [Point]
+decimateData _ [] = []
+decimateData m points = let
+    segmentLength = length points `div` pred m
+    in [points !! (i * segmentLength) | i <- [0 .. m - 2]] ++ [last points]
+
+saveFile :: Variables -> FilePath -> IO ()
+saveFile variables path = do
+    gesturesV <- get $ gestures variables
+    writeFile path $ M.foldWithKey (\ k v s -> s ++ unlines [show k, show v]) "" gesturesV
+
+loadFile :: Variables -> FilePath -> IO ()
+loadFile variables path = do
+    file <- readFile path
+    let (keys, values) = join (***) (map snd) $ break (even . fst) $ zip [1 :: Int ..] $ lines file
+        newGestures = M.fromList $ zip keys (map read values)
+    gestures variables $= newGestures
+    return ()
