@@ -1,5 +1,21 @@
 module Utility where
 
+import           Control.Arrow
+import           Control.Monad
+import qualified Data.Map      as M
+import           Data.StateVar
 
-uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
-f `uncurry3` (x, y, z) = f x y z
+import           Variables
+
+saveFile :: Variables -> FilePath -> IO ()
+saveFile variables path = do
+    gesturesV <- get $ gestures variables
+    writeFile path $ M.foldWithKey (\ k v s -> s ++ unlines [show k, show v]) "" gesturesV
+
+loadFile :: Variables -> FilePath -> IO ()
+loadFile variables path = do
+    file <- readFile path
+    let (keys, values) = join (***) (map snd) $ break (even . fst) $ zip [1 :: Int ..] $ lines file
+        newGestures = M.fromList $ zip keys (map read values)
+    gestures variables $= newGestures
+    return ()
