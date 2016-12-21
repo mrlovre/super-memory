@@ -18,9 +18,9 @@ main = do
     notebook <- notebookNew
     window `containerAdd` notebook
 
-    createDrawingPage notebook variables
+    createDrawingPage  notebook variables
     createTrainingPage notebook variables
-    createTestingPage notebook variables
+    createTestingPage  notebook variables
 
     onDestroy window mainQuit
     widgetShowAll window
