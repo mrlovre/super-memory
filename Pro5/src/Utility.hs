@@ -2,6 +2,7 @@ module Utility where
 
 import           Control.Arrow
 import           Control.Monad
+import           Control.Monad.Random
 import qualified Data.Map      as M
 import           Data.StateVar
 
@@ -19,3 +20,6 @@ loadFile variables path = do
         newGestures = M.fromList $ zip keys (map read values)
     gestures variables $= newGestures
     return ()
+
+randomPM1 :: (MonadRandom m) => m Double
+randomPM1 = (+ (-1)) . (* 2) <$> getRandom

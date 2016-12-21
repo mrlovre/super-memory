@@ -1,4 +1,3 @@
-{-# LANGUAGE NamedFieldPuns  #-}
 module Main where
 
 import           Graphics.UI.Gtk

@@ -1,6 +1,5 @@
 module Pages where
 
-import           Control.Applicative
 import           Control.Arrow
 import           Control.Monad
 import           Control.Monad.Reader
@@ -52,6 +51,10 @@ createDrawingPage notebook variables = void $ do
         unless (any ($ text) [null, (`S.member` M.keysSet gestureTabsV)]) $ do
             gestureEntry `entrySetText` ""
             createGestureBox text scrolledWindowBox variables
+
+    hSeparator <- hSeparatorNew
+    (sideBox `boxPackStart` hSeparator) PackNatural 0
+
     buttonBox <- hButtonBoxNew
     (sideBox `boxPackStart` buttonBox) PackNatural 0
     buttonBox `set` [buttonBoxLayoutStyle := ButtonboxCenter]
