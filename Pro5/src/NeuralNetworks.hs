@@ -4,6 +4,7 @@ module NeuralNetworks where
 import           Control.Arrow
 import           Control.Monad
 import           Control.Monad.State
+import           Data.Function
 import           Data.Matrix         (Matrix)
 import           Data.Vector         (Vector, (!))
 import qualified Data.Vector         as V
@@ -29,7 +30,7 @@ nn [] = error "NN: number of layers must be greater than zero."
 nn layers = do
     nnLayers <- do
         let layersP = layers ++ [1]
-            layers3 = (layersP `zip3` tail layersP) $ tail (tail layersP)
+            layers3 = zip3 layersP (tail layersP) (tail $ tail layersP)
         (V.fromList <$>) $ forM layers3 $ \(fanIn, current, fanOut) -> do
             nnNodes <- V.replicateM current $ do
                 let stretching = 2 / fromIntegral (fanIn + fanOut)
@@ -123,16 +124,29 @@ backpropGradient neuralNetwork input expected = let
         in V.imap makeLayer $ V.init outputs
     in NN { nnLayers = gradients }
 
-
 backpropCorrection :: Double -> NN -> NN -> NN
 backpropCorrection eps gradients neuralNetwork = let
-    subGradient g n = n + g * eps
+    subtractGradient g n = n + g * eps
     newNNLayers = V.zipWith combineLayers (nnLayers gradients) (nnLayers neuralNetwork)
     combineLayers grads layer = let
         combineNodes g n = let
-            newNNWeights = V.zipWith subGradient (nnWeights g) (nnWeights n)
-            newNNBias = nnBias g `subGradient` nnBias n
+            newNNWeights = V.zipWith subtractGradient (nnWeights g) (nnWeights n)
+            newNNBias = nnBias g `subtractGradient` nnBias n
             in NNNode { nnWeights = newNNWeights, nnBias = newNNBias }
         newNNNodes = V.zipWith combineNodes (nnNodes grads) (nnNodes layer)
         in NNLayer { nnNodes = newNNNodes }
     in NN { nnLayers = newNNLayers }
+
+meanGradient :: Vector NN -> NN
+meanGradient grads = let
+    combineGradients l r = let
+        newNNLayers = (V.zipWith combineLayers `on` nnLayers) l r
+        in NN { nnLayers = newNNLayers }
+    combineLayers l r = let
+        newNNNodes = (V.zipWith combineNodes `on` nnNodes) l r
+        in NNLayer { nnNodes = newNNNodes }
+    combineNodes l r = let
+        newNNWeights = (V.zipWith (+) `on` nnWeights) l r
+        newNNBias = ((+) `on` nnBias) l r
+        in NNNode { nnWeights = newNNWeights, nnBias = newNNBias }
+    in V.foldl1 combineGradients grads
