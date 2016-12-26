@@ -4,8 +4,6 @@ import           Control.Arrow
 import           Control.Monad
 import           Graphics.UI.Gtk
 
-import           NeuralNetworks
-import           Utility
 import           Variables
 
 decimationFactor :: Int

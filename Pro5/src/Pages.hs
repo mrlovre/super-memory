@@ -4,12 +4,14 @@ import           Control.Arrow
 import           Control.Monad
 import           Control.Monad.Reader
 import           Data.List
+import           Data.Map               ((!))
 import qualified Data.Map               as M
 import qualified Data.Set               as S
 import           Data.StateVar
 import           Graphics.UI.Gtk        hiding (get)
 import           Graphics.UI.Gtk.Gdk.GC
 
+import           NeuralNetworks
 import           Process
 import           Utility
 import           Variables
@@ -68,7 +70,7 @@ createDrawingPage notebook variables = void $ do
         result <- fileChooserGetFilename fileChooserDialog
         case result of
             Just fileName -> loadFile variables fileName
-            Nothing -> return ()
+            Nothing       -> return ()
         widgetDestroy fileChooserDialog
 
     buttonSave <- buttonNewWithLabel "Save"
@@ -80,7 +82,7 @@ createDrawingPage notebook variables = void $ do
         result <- fileChooserGetFilename fileChooserDialog
         case result of
             Just fileName -> saveFile variables fileName
-            Nothing -> return ()
+            Nothing       -> return ()
         widgetDestroy fileChooserDialog
 
     (drawingArea `widgetSetSizeRequest`) 600 600
@@ -95,7 +97,11 @@ createDrawingPage notebook variables = void $ do
         liftIO $ do
             tempPointsV <- normalizeData . decimateData . nub <$> get (tempPoints variables)
             selectedGestureV <- get $ selectedGesture variables
-            unless (null selectedGestureV) $ gestures variables $~ M.insertWith (++) selectedGestureV [tempPointsV]
+            unless (null selectedGestureV) $ do
+                gestures variables $~ M.insertWith (++) selectedGestureV [tempPointsV]
+                gestureButton <- (! selectedGestureV) <$> get (gestureTabs variables)
+                gestureCount <- (length . (! selectedGestureV)) <$> get (gestures variables)
+                gestureButton `buttonSetLabel` (selectedGestureV ++ ": " ++ show gestureCount)
             widgetShowAll notebook
         return True
 
@@ -112,7 +118,7 @@ createDrawingPage notebook variables = void $ do
         drawWindowClear drawWindow
         gc <- gcNew drawWindow
         tempPointsV <- get (tempPoints variables)
-        (drawWindow `drawLines` gc) $ decimateData tempPointsV
+        (drawWindow `drawLines` gc) tempPointsV
         return True
 
 createTrainingPage :: Notebook -> Variables -> IO ()
@@ -141,6 +147,10 @@ createTrainingPage notebook variables = void $ do
 
     trainButton <- buttonNewWithLabel "Train"
     buttonBox `containerAdd` trainButton
+    (trainButton `onClicked`) $ do
+        architecture <- splitNumbers <$> entryGetText architectureEntry
+        neuralNetwork <- nn architecture
+        print neuralNetwork
 
     testingBox <- vBoxNew False 6
     (notebook `notebookAppendPage` testingBox) "Testing"

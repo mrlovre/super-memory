@@ -5,7 +5,7 @@ import           Graphics.UI.Gtk
 import           Pages
 import           Variables
 
-import Test
+import           Test
 
 default (Double, Double)
 

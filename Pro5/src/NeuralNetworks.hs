@@ -149,4 +149,11 @@ meanGradient grads = let
         newNNWeights = (V.zipWith (+) `on` nnWeights) l r
         newNNBias = ((+) `on` nnBias) l r
         in NNNode { nnWeights = newNNWeights, nnBias = newNNBias }
-    in V.foldl1 combineGradients grads
+    scaleGradient grad = let
+        scaleNode node = let
+            newNNWeights = V.map (/ fromIntegral nGrads) (nnWeights node)
+            newNNBias = nnBias node / fromIntegral nGrads
+            in NNNode { nnWeights = newNNWeights, nnBias = newNNBias }
+        in NN { nnLayers = V.map (NNLayer . V.map scaleNode . nnNodes) $ nnLayers grad }
+    nGrads = V.length grads
+    in scaleGradient $ V.foldl1 combineGradients grads
