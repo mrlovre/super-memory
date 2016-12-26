@@ -1,10 +1,12 @@
+
 module NeuralNetworks where
 
 import           Control.Arrow
 import           Control.Monad
-import           Data.Matrix
-import           Data.Vector   (Vector)
-import qualified Data.Vector   as V
+import           Control.Monad.State
+import           Data.Matrix         (Matrix)
+import           Data.Vector         (Vector, (!))
+import qualified Data.Vector         as V
 import           Utility
 
 data NN where
@@ -13,13 +15,19 @@ data NN where
 instance Show NN where
     show NN { .. } = unlines $ "NN:" : map (("  " ++) . show) (V.toList nnLayers)
 
-scalarProduct :: (Num a) => Vector a -> Vector a -> a
-scalarProduct = curry $ (! (1, 1)) . uncurry (*) . (rowVector *** colVector)
+dot :: (Num a) => Vector a -> Vector a -> a
+x1 `dot` x2 = V.sum $ V.zipWith (*) x1 x2
+
+add :: (Num a) => Vector a -> Vector a -> Vector a
+add = V.zipWith (+)
+
+sub :: (Num a) => Vector a -> Vector a -> Vector a
+sub = V.zipWith (-)
 
 nn :: [Int] -> IO NN
 nn [] = error "NN: number of layers must be greater than zero."
 nn layers = do
-    otherLayers <- do
+    nnLayers <- do
         let layersP = layers ++ [1]
             layers3 = (layersP `zip3` tail layersP) $ tail (tail layersP)
         (V.fromList <$>) $ forM layers3 $ \(fanIn, current, fanOut) -> do
@@ -28,17 +36,14 @@ nn layers = do
                 nnWeights <- V.replicateM fanIn ((* stretching) <$> randomPM1)
                 let nnBias = 0
                 return NNNode { .. }
-            let nnActivationFunction = SigmoidFunction
             return NNLayer { .. }
-    let nnLayers = otherLayers
     return NN { .. }
 
 data NNLayer where
-    NNLayer :: { nnNodes :: Vector NNNode, nnActivationFunction :: ActivationFunction } -> NNLayer
+    NNLayer :: { nnNodes :: Vector NNNode } -> NNLayer
 
 instance Show NNLayer where
-    show NNLayer { .. } = unlines $
-        ("NNLayer: ActivationFunction = " ++ show nnActivationFunction) : map (("    " ++ ) . show) (V.toList nnNodes)
+    show NNLayer { .. } = unlines $ map (("    " ++ ) . show) (V.toList nnNodes)
 
 data ActivationFunction = SigmoidFunction | IdentityFunction
     deriving Show
@@ -69,7 +74,7 @@ identityNode n = let
     in NNNode { .. }
 
 layerForwardPass :: NNLayer -> Vector Double -> Vector Double
-layerForwardPass NNLayer { .. } input = V.map (\ NNNode { .. } -> nnWeights `scalarProduct` input) nnNodes
+layerForwardPass NNLayer { .. } input = V.map (\ NNNode { .. } -> nnWeights `dot` input) nnNodes
 
 forwardPass :: NN -> Vector Double -> Vector Double
 forwardPass NN { .. } input = foldl (flip layerForwardPass) input nnLayers
@@ -80,7 +85,54 @@ forwardScanl NN { .. } input = V.scanl (flip layerForwardPass) input nnLayers
 forwardPasses :: NN -> Matrix Double -> Matrix Double
 forwardPasses NN { .. } inputs = undefined
 
-backprop :: Vector Double -> Vector Double -> NN -> NN
-backprop output expected nn1@NN { .. } = let
-    nnLayers = undefined
-    in undefined
+backpropGradient :: NN -> Vector Double -> Vector Double -> NN
+backpropGradient neuralNetwork input expected = let
+    outputs = forwardScanl neuralNetwork input
+    layers = nnLayers neuralNetwork
+    nLayers = V.length layers
+    outputDifference = expected `sub` V.last outputs
+    errors = let
+        processLayer rI layer = let
+            i = nLayers - rI - 1
+            processNodeLastLayer j NNNode { .. } = let
+                der = derivative SigmoidFunction
+                in der (outputs ! succ i ! j) * (outputDifference ! j)
+            processNode j NNNode { .. } = do
+                prevErr <- get
+                let der = derivative SigmoidFunction
+                return $ der (outputs ! succ i ! j) * (prevErr `dot` nnWeights)
+            in if
+                | i == pred nLayers -> do
+                    let err = V.imap processNodeLastLayer (nnNodes layer)
+                    put err
+                    return err
+                | otherwise -> do
+                    err <- V.imapM processNode (nnNodes layer)
+                    put err
+                    return err
+        in V.reverse $ V.imapM processLayer (V.reverse layers) `evalState` V.empty
+    gradients = let
+        makeLayer i output = let
+            err = errors ! i
+            makeNode e = let
+                nnWeights = V.map (e *) output
+                nnBias = 0
+                in NNNode { .. }
+            nnNodes = V.map makeNode err
+            in NNLayer { .. }
+        in V.imap makeLayer $ V.init outputs
+    in NN { nnLayers = gradients }
+
+
+backpropCorrection :: Double -> NN -> NN -> NN
+backpropCorrection eps gradients neuralNetwork = let
+    subGradient g n = n + g * eps
+    newNNLayers = V.zipWith combineLayers (nnLayers gradients) (nnLayers neuralNetwork)
+    combineLayers grads layer = let
+        combineNodes g n = let
+            newNNWeights = V.zipWith subGradient (nnWeights g) (nnWeights n)
+            newNNBias = nnBias g `subGradient` nnBias n
+            in NNNode { nnWeights = newNNWeights, nnBias = newNNBias }
+        newNNNodes = V.zipWith combineNodes (nnNodes grads) (nnNodes layer)
+        in NNLayer { nnNodes = newNNNodes }
+    in NN { nnLayers = newNNLayers }
