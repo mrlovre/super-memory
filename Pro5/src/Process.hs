@@ -2,6 +2,8 @@ module Process where
 
 import           Control.Arrow
 import           Control.Monad
+import           Data.Vector     (Vector)
+import qualified Data.Vector     as V
 import           Graphics.UI.Gtk
 
 import           Variables
@@ -25,3 +27,6 @@ decimateData []     = []
 decimateData points = let
     segmentLength = length points `div` pred decimationFactor
     in [points !! (i * segmentLength) | i <- [0 .. decimationFactor - 2]] ++ [last points]
+
+flattenGesture :: [DecimalPoint] -> Vector Double
+flattenGesture = V.fromList . concatMap (\ (a, b) -> [a, b])

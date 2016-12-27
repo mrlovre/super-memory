@@ -5,7 +5,6 @@ import           Control.Arrow
 import           Control.Monad
 import           Control.Monad.State
 import           Data.Function
-import           Data.Matrix         (Matrix)
 import           Data.Vector         (Vector, (!))
 import qualified Data.Vector         as V
 import           Utility
@@ -83,9 +82,6 @@ forwardPass NN { .. } input = foldl (flip layerForwardPass) input nnLayers
 forwardScanl :: NN -> Vector Double -> Vector (Vector Double)
 forwardScanl NN { .. } input = V.scanl (flip layerForwardPass) input nnLayers
 
-forwardPasses :: NN -> Matrix Double -> Matrix Double
-forwardPasses NN { .. } inputs = undefined
-
 backpropGradient :: NN -> Vector Double -> Vector Double -> NN
 backpropGradient neuralNetwork input expected = let
     outputs = forwardScanl neuralNetwork input
@@ -137,7 +133,7 @@ backpropCorrection eps gradients neuralNetwork = let
         in NNLayer { nnNodes = newNNNodes }
     in NN { nnLayers = newNNLayers }
 
-meanGradient :: Vector NN -> NN
+meanGradient :: [NN] -> NN
 meanGradient grads = let
     combineGradients l r = let
         newNNLayers = (V.zipWith combineLayers `on` nnLayers) l r
@@ -155,5 +151,13 @@ meanGradient grads = let
             newNNBias = nnBias node / fromIntegral nGrads
             in NNNode { nnWeights = newNNWeights, nnBias = newNNBias }
         in NN { nnLayers = V.map (NNLayer . V.map scaleNode . nnNodes) $ nnLayers grad }
-    nGrads = V.length grads
-    in scaleGradient $ V.foldl1 combineGradients grads
+    nGrads = length grads
+    in scaleGradient $ foldl1 combineGradients grads
+
+meanSquaredError :: NN -> [(Vector Double, Vector Double)] -> Double
+meanSquaredError neuralNetwork trainSet = let
+    outputs = map (forwardPass neuralNetwork . fst) trainSet
+    differenceSquared o e = (o - e) ** 2
+    residuals = zipWith (\ o e -> V.sum $ V.zipWith differenceSquared o e) outputs (map snd trainSet)
+    trainSetSize = length trainSet
+    in sum residuals / fromIntegral trainSetSize
