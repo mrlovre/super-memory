@@ -10,7 +10,7 @@ import qualified Data.Vector         as V
 import           Utility
 
 data NN where
-    NN :: { nnLayers :: Vector NNLayer } -> NN
+    NN :: { nnLayers :: !(Vector NNLayer) } -> NN
 
 instance Show NN where
     show NN { .. } = unlines $ "NN:" : map (("  " ++) . show) (V.toList nnLayers)
@@ -40,7 +40,7 @@ nn layers = do
     return NN { .. }
 
 data NNLayer where
-    NNLayer :: { nnNodes :: Vector NNNode } -> NNLayer
+    NNLayer :: { nnNodes :: !(Vector NNNode) } -> NNLayer
 
 instance Show NNLayer where
     show NNLayer { .. } = unlines $ map (("    " ++ ) . show) (V.toList nnNodes)
@@ -64,7 +64,7 @@ instance DerivableFunction ActivationFunction where
 type BinaryFunction = Double -> Double
 
 data NNNode where
-    NNNode :: { nnWeights :: Vector Double, nnBias :: Double } -> NNNode
+    NNNode :: { nnWeights :: !(Vector Double), nnBias :: !Double } -> NNNode
     deriving Show
 
 identityNode :: Int -> NNNode

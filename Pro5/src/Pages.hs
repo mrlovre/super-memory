@@ -162,8 +162,8 @@ createTrainingPage notebook variables = void $ do
                     train neur = let
                         grads = map (uncurry $ backpropGradient neur) trainSet
                         mGrad = meanGradient grads
-                        in backpropCorrection 0.1 mGrad neur
-                    trainedNetwork = head $ dropWhile ((> 0.01) . (`meanSquaredError` trainSet)) $ iterate train neuralNetworkV
+                        in backpropCorrection 0.01 mGrad neur
+                    trainedNetwork = until ((< 0.01) . screen . (`meanSquaredError` trainSet)) train neuralNetworkV
                 neuralNetwork variables $= trainedNetwork
                 print $ meanSquaredError trainedNetwork trainSet
             | otherwise -> do
