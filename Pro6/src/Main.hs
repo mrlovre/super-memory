@@ -1,4 +1,7 @@
 module Main where
 
+import           Sample
+
+
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = print trainData
