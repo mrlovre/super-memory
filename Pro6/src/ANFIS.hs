@@ -36,6 +36,9 @@ anfisInitialize d m = do
 
 trainANFIS :: [(Sample, Output)] -> TrainingAlgorithm -> Double -> ANFIS -> ANFIS
 trainANFIS samples algorithm eta anfis = let
+    etaNormalized = case algorithm of
+        StochasticGradientDescent -> eta
+        GradientDescent -> eta / fromIntegral (length samples)
     sampleGradients anfisCurrent@ANFIS { .. } (sample@Sample { .. }, expected) = let
         (membershipLayerOutputs, tNormLayerNormalizedOutputs, transferLayerOutputs) = runANFISLayers anfisCurrent sample
         output = runANFIS anfisCurrent sample
@@ -56,11 +59,11 @@ trainANFIS samples algorithm eta anfis = let
             in V.fromList $ map gradForRule [0 .. pred m]
         in (gradMembershipParams, gradTransferParams)
     updateTransferFunction LinearCombination { .. } grads = let
-        [nTfp, nTfq, nTfr] = zipWith (-) [tfp, tfq, tfr] $ map (eta *) grads
+        [nTfp, nTfq, nTfr] = zipWith (-) [tfp, tfq, tfr] $ map (etaNormalized *) grads
         in LinearCombination nTfp nTfq nTfr
     updateMembershipLayer vectorTransferFunctions vectorGrads = let
         updateMembershipFunction Sigmoid { .. } grads = let
-            [nMfa, nMfb] = zipWith (-) [mfa, mfb] $ map (eta *) grads
+            [nMfa, nMfb] = zipWith (-) [mfa, mfb] $ map (etaNormalized / 10 *) grads
             in Sigmoid nMfa nMfb
         in V.zipWith updateMembershipFunction vectorTransferFunctions vectorGrads
     in case algorithm of
