@@ -10,10 +10,10 @@ data MembershipFunction where
 deriving instance Show MembershipFunction
 
 evaluateMembership :: MembershipFunction -> Double -> Double
-evaluateMembership Sigmoid { .. } x = 1.0 / (1.0 + exp (-mfb * (x - mfa)))
+evaluateMembership Sigmoid {..} x = 1.0 / (1.0 + exp (-mfb * (x - mfa)))
 
 membershipParameterDerivatives :: MembershipFunction -> Double -> [Double]
-membershipParameterDerivatives sigmoid@Sigmoid { .. } x = let
+membershipParameterDerivatives sigmoid@Sigmoid {..} x = let
     s = evaluateMembership sigmoid x
     ds = s * (1.0 - s)
     derA = ds * (-mfb)
@@ -50,11 +50,11 @@ data TransferFunction where
 deriving instance Show TransferFunction
 
 evaluateTransfer :: TransferFunction -> [Double] -> Double
-evaluateTransfer LinearCombination { .. } [f1, f2] = tfp * f1 + tfq * f2 + tfr
+evaluateTransfer LinearCombination {..} [f1, f2] = tfp * f1 + tfq * f2 + tfr
 evaluateTransfer LinearCombination {} _ = error "Linear combination expects two values, f1 and f2."
 
 transferParameterDerivatives :: TransferFunction -> [Double] -> [Double]
-transferParameterDerivatives LinearCombination { .. } [f1, f2] = let
+transferParameterDerivatives LinearCombination {..} [f1, f2] = let
     derP = f1
     derQ = f2
     derR = 1.0

@@ -32,14 +32,14 @@ anfisInitialize d m = do
     membershipLayer <- V.replicateM d $ V.replicateM m randomMembershipFunction
     let tNorm = AlgebraicProduct
         transferLayer = V.fromList $ map (uncurryN LinearCombination) $ zip3 ps qs rs
-    return ANFIS { .. }
+    return ANFIS {..}
 
 trainANFIS :: [(Sample, Output)] -> TrainingAlgorithm -> Double -> ANFIS -> ANFIS
 trainANFIS samples algorithm eta anfis = let
     etaNormalized = case algorithm of
         StochasticGradientDescent -> eta
         GradientDescent -> eta / fromIntegral (length samples)
-    sampleGradients anfisCurrent@ANFIS { .. } (sample@Sample { .. }, expected) = let
+    sampleGradients anfisCurrent@ANFIS {..} (sample@Sample {..}, expected) = let
         (membershipLayerOutputs, tNormLayerNormalizedOutputs, transferLayerOutputs) = runANFISLayers anfisCurrent sample
         output = runANFIS anfisCurrent sample
         derErrOut = output - expected
@@ -58,24 +58,24 @@ trainANFIS samples algorithm eta anfis = let
             gradForRule i = map (derErrOut * derOutTransfer i *) $ derTransferParams i [sx, sy]
             in V.fromList $ map gradForRule [0 .. pred m]
         in (gradMembershipParams, gradTransferParams)
-    updateTransferFunction LinearCombination { .. } grads = let
+    updateTransferFunction LinearCombination {..} grads = let
         [nTfp, nTfq, nTfr] = zipWith (-) [tfp, tfq, tfr] $ map (etaNormalized *) grads
         in LinearCombination nTfp nTfq nTfr
     updateMembershipLayer vectorTransferFunctions vectorGrads = let
-        updateMembershipFunction Sigmoid { .. } grads = let
+        updateMembershipFunction Sigmoid {..} grads = let
             [nMfa, nMfb] = zipWith (-) [mfa, mfb] $ map (etaNormalized / 10 *) grads
             in Sigmoid nMfa nMfb
         in V.zipWith updateMembershipFunction vectorTransferFunctions vectorGrads
     in case algorithm of
         StochasticGradientDescent -> let
-            stochasticUpdate anfisCurrent@ANFIS { .. } sampleOutput = let
+            stochasticUpdate anfisCurrent@ANFIS {..} sampleOutput = let
                 (gradMembershipParams, gradTransferParams) = sampleGradients anfisCurrent sampleOutput
                 newMembershipLayer = V.zipWith updateMembershipLayer membershipLayer gradMembershipParams
                 newTransferLayer = V.zipWith updateTransferFunction transferLayer gradTransferParams
                 in anfisCurrent { membershipLayer = newMembershipLayer, transferLayer = newTransferLayer }
             in foldl stochasticUpdate anfis samples
         GradientDescent -> let
-            update ANFIS { .. } (gradMembershipParams, gradTransferParams) = let
+            update ANFIS {..} (gradMembershipParams, gradTransferParams) = let
                 newMembershipLayer = V.zipWith updateMembershipLayer membershipLayer gradMembershipParams
                 newTransferLayer = V.zipWith updateTransferFunction transferLayer gradTransferParams
                 in anfis { membershipLayer = newMembershipLayer, transferLayer = newTransferLayer }
@@ -88,7 +88,7 @@ runANFIS a sample = let
     in V.sum $ V.zipWith (*) tNormLayerNormalizedOutputs transferLayerOutputs
 
 runANFISLayers :: ANFIS -> Sample -> ((Vector Double, Vector Double), Vector Double, Vector Double)
-runANFISLayers ANFIS { .. } Sample { .. } = let
+runANFISLayers ANFIS {..} Sample {..} = let
     membershipLayerOutputs = let
         evaluateMembershipWith a = V.map (`evaluateMembership` a)
         in (evaluateMembershipWith sx *** evaluateMembershipWith sy) $ ((! 0) &&& (! 1)) membershipLayer
