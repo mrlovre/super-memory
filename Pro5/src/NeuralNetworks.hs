@@ -1,4 +1,3 @@
-
 module NeuralNetworks where
 
 import           Control.Arrow
@@ -74,7 +73,7 @@ identityNode n = let
     in NNNode { .. }
 
 layerForwardPass :: NNLayer -> Vector Double -> Vector Double
-layerForwardPass NNLayer { .. } input = V.map (\ NNNode { .. } -> nnWeights `dot` input) nnNodes
+layerForwardPass NNLayer { .. } input = V.map (\ NNNode { .. } -> function SigmoidFunction (nnWeights `dot` input)) nnNodes
 
 forwardPass :: NN -> Vector Double -> Vector Double
 forwardPass NN { .. } input = foldl (flip layerForwardPass) input nnLayers
@@ -133,8 +132,8 @@ backpropCorrection eps gradients neuralNetwork = let
         in NNLayer { nnNodes = newNNNodes }
     in NN { nnLayers = newNNLayers }
 
-meanGradient :: [NN] -> NN
-meanGradient grads = let
+totalGradient :: [NN] -> NN
+totalGradient grads = let
     combineGradients l r = let
         newNNLayers = (V.zipWith combineLayers `on` nnLayers) l r
         in NN { nnLayers = newNNLayers }

@@ -12,6 +12,7 @@ import           Data.Vector            (Vector)
 import qualified Data.Vector            as V
 import           Graphics.UI.Gtk        hiding (get)
 import           Graphics.UI.Gtk.Gdk.GC
+import Data.Maybe
 
 import           NeuralNetworks
 import           Process
@@ -71,7 +72,16 @@ createDrawingPage notebook variables = void $ do
         dialogRun fileChooserDialog
         result <- fileChooserGetFilename fileChooserDialog
         case result of
-            Just fileName -> loadFile variables fileName
+            Just fileName -> do
+                gestureTabsV <- (map snd . M.toList) <$> get (gestureTabs variables)
+                mapM_ widgetDestroy gestureTabsV
+                loadFile variables fileName
+                gestureNames <- M.keys <$> get (gestures variables)
+                gestureTabs variables $= M.empty
+                print gestureNames
+                mapM_ (\ text -> createGestureBox text scrolledWindowBox variables) gestureNames
+                selectedGesture variables $= ""
+                return ()
             Nothing       -> return ()
         widgetDestroy fileChooserDialog
 
@@ -79,7 +89,7 @@ createDrawingPage notebook variables = void $ do
     buttonBox `containerAdd` buttonSave
     (buttonSave `onClicked`) $ do
         fileChooserDialog <- fileChooserDialogNew Nothing Nothing FileChooserActionSave
-                [(stockCancel, ResponseCancel), (stockOpen, ResponseAccept)]
+                [(stockCancel, ResponseCancel), (stockSave, ResponseAccept)]
         dialogRun fileChooserDialog
         result <- fileChooserGetFilename fileChooserDialog
         case result of
@@ -143,6 +153,12 @@ createTrainingPage notebook variables = void $ do
     architectureEntry <- entryNew
     (trainingVBox `boxPackStart` architectureEntry) PackNatural 6
 
+    maximumIterationLimitLabel <- labelNew $ Just "Maximum iteration limit (100000 default, -1 - no limit):"
+    (trainingVBox `boxPackStart` maximumIterationLimitLabel) PackNatural 6
+
+    maximumIterationLimitEntry <- entryNew
+    (trainingVBox `boxPackStart` maximumIterationLimitEntry) PackNatural 6
+
     buttonBox <- hButtonBoxNew
     buttonBox `set` [buttonBoxLayoutStyle := ButtonboxCenter]
     (trainingVBox `boxPackStart` buttonBox) PackNatural 6
@@ -152,27 +168,39 @@ createTrainingPage notebook variables = void $ do
     (trainButton `onClicked`) $ do
         architecture <- splitNumbers <$> entryGetText architectureEntry
         gesturesV <- get (gestures variables)
+        maxIterLimitRead <- (fromMaybe 0 . listToMaybe . map fst . reads) <$> entryGetText maximumIterationLimitEntry
         let nClasses = length classes
             classes = M.keys gesturesV
+            cond1 = length architecture >= 2
+            cond2 = head architecture == 2 * decimationFactor && last architecture == nClasses
+            cond3 = not $ maxIterLimitRead == 0 || maxIterLimitRead < -1
         if
-            | length architecture >= 2 && head architecture == 2 * decimationFactor && last architecture == nClasses -> do
+            | cond1 && cond2 && cond3 -> do
                 neuralNetworkV <- nn architecture
                 let oneHots = [V.fromList [if i == j then 1 else 0 | j <- [0 .. pred nClasses]] | i <- [0 .. pred nClasses]] :: [Vector Double]
                     trainSet = concatMap (\ (c, o) -> map flattenGesture (gesturesV ! c) `zip` repeat o) (classes `zip` oneHots)
                     train neur = let
                         grads = map (uncurry $ backpropGradient neur) trainSet
-                        mGrad = meanGradient grads
-                        in backpropCorrection 0.01 mGrad neur
-                    trainedNetwork = until ((< 0.01) . screen . (`meanSquaredError` trainSet)) train neuralNetworkV
+                        mGrad = totalGradient grads
+                        in backpropCorrection 0.1 mGrad neur
+                    trainedNetwork = untilLimited maxIterLimitRead ((< 0.01) . screen . (`meanSquaredError` trainSet)) train neuralNetworkV
                 neuralNetwork variables $= trainedNetwork
                 print $ meanSquaredError trainedNetwork trainSet
             | otherwise -> do
                 let message = if
                         | nClasses == 0 -> "No classes!"
+                        | not cond3 -> "Invalid maximum iteration limit!"
                         | otherwise -> "Neural network architecture must be " ++ show (2 * decimationFactor)
                                 ++ " x ... x " ++ show nClasses ++ "."
                 dialog <- messageDialogNew Nothing [DialogDestroyWithParent] MessageError ButtonsClose message
                 dialogRun dialog >> widgetDestroy dialog
+
+untilLimited :: Int -> (a -> Bool) -> (a -> a) -> a -> a
+untilLimited n p a t = if
+    | n == 0 || p t -> t
+    | otherwise -> let
+        u = a t
+        in untilLimited (n - 1) p a u
 
 createTestingPage :: Notebook -> Variables -> IO ()
 createTestingPage notebook variables = void $ do

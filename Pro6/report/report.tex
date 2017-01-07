@@ -1,0 +1,299 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex]{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3.5cm]{geometry}
+\usepackage{indentfirst}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+
+\title{Neizrazito, evolucijsko i neuroračunarstvo:\\
+  izvješće uz 6. laboratorijsku vježbu - sustav ANFIS}
+
+\author{Lovre Mrčela}
+
+\date{7. siječnja 2017.}
+
+\begin{document}
+
+\maketitle
+
+\section*{Derivacije pogreške s obzirom na parametre mreže}
+
+Ukupna pogreška $E$ je:
+
+$$ E = \dfrac{1}{2} \sum_{n=1}^{N} \left( o^{(n)} - t^{(n)} \right)^2, $$
+gdje je $N$ broj pravila, $o^{(n)}$ dobiveni izlaz iz sustava, a $t^{(n)}$ očekivani izlaz iz sustava, za $n$-ti primjer.
+
+$n$-ti izlaz $o^{(n)}$ je:
+
+$$ o^{(n)} = \sum_{m=1}^{M} \widetilde{w}_m f_m \left( x^{(n)}, y^{(n)}; p_m, q_m, r_m \right), $$
+gdje je $\widetilde{w}_m$ pripadna normalizirana težina, a $f_m$ prijenosna funkcija s parametrima $p_m$, $q_m$, i $r_m$, $m$-tog pravila; $x^{(n)}$ i $y^{(n)}$ su vrijednosti $n$-tog primjera u ovom zadatku.
+
+Prijenosna funkcija $m$-tog pravila $f_m$ je, u ovom zadatku, linearna kombinacija vrijednosti $x^{(n)}$ i $y^{(n)}$ $n$-tog ulaza:
+
+$$ f_m \left( x^{(n)}, y^{(n)}; p_m, q_m, r_m \right) = p_m x^{(n)} + q_m y^{(n)} + r_m. $$
+
+
+Normalizirana težina $m$-tog pravila $\widetilde{w}_m$ je:
+
+$$ \widetilde{w}_m = \dfrac{w_m}{\sum_{k=1}^{M} w_k}. $$
+
+Nenormalizirana težina $m$-tog pravila $w_m$ jednaka je $t$-normi mjera pripadnosti $n$-tog ulaznog primjera paru neizrazitih skupova $(A_m, B_m)$. U ovom zadatku zadana $t$-norma je algebarski produkt $\left( \cdot \right)$, pa je nenormalizirana težina $w_m$:
+
+$$ w_m = \mu_{A_m} \left( x^{(n)} \right) \cdot \mu_{B_m} \left( y^{(n)} \right), $$
+gdje je $\mu_{X_m} \left( x \right)$ mjera pripadnosti elementa $x$ neizrazitom skupu $X$ $m$-tog pravila.
+
+Mjere pripadnosti $\mu_{X_m} \left( x \right)$ u ovom zadatku modelirane su parametriziranim sigmoidalnim funkcijama s parametrima $a_{X_m}$ i $b_{X_m}$:
+
+$$ \mu_{X_m} \left( x; a_{X_m}, b_{X_m} \right) = \dfrac{1}{1 + e^{-b_{X_m} \left( x - a_{X_m} \right)}}. $$
+
+Za $m$-to pravilo postoji 7 parametara koje je potrebno trenirati na zadanom skupu podataka: $p_m$, $q_m$, $r_m$, $a_{A_m}$, $a_{B_m}$, $b_{A_m}$, i $b_{B_m}$. Ukupno je $7 M$ parametara, gdje je M broj pravila.
+
+Derivacija ukupne pogreške s obzirom na izlaz iz sustava $o^{(n)}$ za $n$-ti primjer je:
+
+$$ \dfrac{\partial E}{\partial o^{(n)}} = o^{(n)} - t^{(n)}. $$
+
+Derivacija izlaza $o^{(n)}$ za $n$-ti primjer po prijenosnoj funkciji $f_m$ $m$-tog pravila je:
+
+$$ \dfrac{\partial o^{(n)}}{\partial f_m} = \widetilde{w}_m. $$
+
+Derivacije prijenosne funkcije $f_m$ $m$-tog pravila po parametrima $p_m$, $q_m$, i $r_m$, za $n$-ti primjer, su:
+
+$$
+  \dfrac{\partial f_m}{\partial p_m} = x^{(n)}, \qquad
+  \dfrac{\partial f_m}{\partial q_m} = y^{(n)}, \qquad
+  \dfrac{\partial f_m}{\partial r_m} = 1.
+$$
+
+Derivacije nenormalizirane težine $w_m$ $m$-tog pravila po mjerama pripadnosti neizrazitim skupovima $\mu_{A_m}$ i $\mu_{B_m}$, za $n$-ti primjer su:
+
+$$
+  \dfrac{\partial w_m}{\partial \mu_{A_m}}
+  = \mu_{B_m} \left( x^{(n)}; a_{B_m}, b_{B_m} \right), \qquad
+  \dfrac{\partial w_m}{\partial \mu_{B_m}}
+  = \mu_{A_m} \left( x^{(n)}; a_{A_m}, b_{A_m} \right),
+$$
+a normalizirane težine $\widetilde{w}_m$:
+
+$$
+  \dfrac{\partial \widetilde{w}_m}{\partial \mu_{A_m}}
+  = \dfrac{1}{\sum_{k=1}^{M} w_k} \cdot
+    \dfrac{\partial w_m}{\partial \mu_{A_m}}, \qquad
+  \dfrac{\partial \widetilde{w}_m}{\partial \mu_{B_m}}
+    = \dfrac{1}{\sum_{k=1}^{M} w_k} \cdot
+    \dfrac{\partial w_m}{\partial \mu_{B_m}}.
+$$
+
+Derivacije mjere pripadnosti $\mu_{X_m}$ neizrazitom skupu $X_m$ $m$-tog pravila po parametrima $a_{X_m}$ i $b_{X_m}$ su:
+
+\begin{align*}
+  \dfrac{\partial \mu_{X_m}}{\partial a_{X_m}}
+  &= \dfrac{-1}{\left( 1 + e^{-b_{X_m}\left( x - a_{X_m} \right)} \right)^2} \cdot
+    e^{-b_{X_m}\left( x - a_{X_m} \right)} \cdot (-b) \\
+  &= -b \cdot \mu_{X_m} \left( x^{(n)}; a_{X_m}, b_{X_m} \right) \cdot \left( 1 - \mu_{X_m} \left( x^{(n)}; a_{X_m}, b_{X_m} \right) \right) \\ \\
+  \dfrac{\partial \mu_{X_m}}{\partial b_{X_m}}
+  &= \dfrac{-1}{\left( 1 + e^{-b_{X_m}\left( x - a_{X_m} \right)} \right)^2} \cdot
+  e^{-b_{X_m}\left( x - a_{X_m} \right)} \cdot (-(x - a)) \\
+  &= (x - a) \cdot \mu_{X_m} \left( x^{(n)}; a_{X_m}, b_{X_m} \right) \cdot \left( 1 - \mu_{X_m} \left( x^{(n)}; a_{X_m}, b_{X_m} \right) \right)
+\end{align*}
+
+Konačno, tražene derivacije ukupne pogreške s obzirom na sve parametre sustava za $m$-to pravilo i $n$-ti ulazni primjer su:
+
+\begin{align*}
+  \dfrac{\partial E}{\partial p_m} &= 
+    \dfrac{\partial E}{\partial o^{(n)}} 
+    \dfrac{\partial o^{(n)}}{\partial f_m}
+    \dfrac{\partial f_m}{\partial p_m} =
+    \left( o^{(n)} - t^{(n)} \right) \cdot
+    \widetilde{w}_m \cdot x^{(n)}, \\ \\
+  \dfrac{\partial E}{\partial q_m} &= 
+    \dfrac{\partial E}{\partial o^{(n)}} 
+    \dfrac{\partial o^{(n)}}{\partial f_m}
+    \dfrac{\partial f_m}{\partial q_m} =
+    \left( o^{(n)} - t^{(n)} \right) \cdot
+    \widetilde{w}_m \cdot y^{(n)}, \\ \\
+  \dfrac{\partial E}{\partial r_m} &= 
+    \dfrac{\partial E}{\partial o^{(n)}} 
+    \dfrac{\partial o^{(n)}}{\partial f_m}
+    \dfrac{\partial f_m}{\partial r_m} =
+    \left( o^{(n)} - t^{(n)} \right) \cdot
+    \widetilde{w}_m, \\ \\
+  \dfrac{\partial E}{\partial a_{A_m}} &= 
+    \dfrac{\partial E}{\partial o^{(n)}} 
+    \dfrac{\partial o^{(n)}}{\partial w_m}
+    \dfrac{\partial w_m}{\mu_{A_m}}
+    \dfrac{\partial \mu_{A_m}}{\partial a_{A_m}}, \\ &=
+    \left( o^{(n)} - t^{(n)} \right) \cdot
+    \dfrac{1}{\sum_{k=1}^{M} w_k} \cdot
+    \mu_{B_m} \left( x^{(n)}; a_{B_m}, b_{B_m} \right) \\ &\cdot
+    (-b) \cdot \mu_{A_m} \left( x^{(n)}; a_{A_m}, b_{A_m} \right) \cdot \left( 1 - \mu_{A_m} \left( x^{(n)}; a_{A_m}, b_{A_m} \right) \right), \\ \\
+  \dfrac{\partial E}{\partial b_{A_m}} &= 
+    \dfrac{\partial E}{\partial o^{(n)}} 
+    \dfrac{\partial o^{(n)}}{\partial w_m}
+    \dfrac{\partial w_m}{\mu_{A_m}}
+    \dfrac{\partial \mu_{A_m}}{\partial b_{A_m}}, \\ &=
+    \left( o^{(n)} - t^{(n)} \right) \cdot
+    \dfrac{1}{\sum_{k=1}^{M} w_k} \cdot
+    \mu_{B_m} \left( x^{(n)}; a_{B_m}, b_{B_m} \right) \\ &\cdot
+    (x - a) \cdot \mu_{A_m} \left( x^{(n)}; a_{A_m}, b_{A_m} \right) \cdot \left( 1 - \mu_{A_m} \left( x^{(n)}; a_{A_m}, b_{A_m} \right) \right), \\ \\
+  \dfrac{\partial E}{\partial a_{B_m}} &= 
+    \dfrac{\partial E}{\partial o^{(n)}} 
+    \dfrac{\partial o^{(n)}}{\partial w_m}
+    \dfrac{\partial w_m}{\mu_{B_m}}
+    \dfrac{\partial \mu_{B_m}}{\partial a_{B_m}}, \\ &=
+    \left( o^{(n)} - t^{(n)} \right) \cdot
+    \dfrac{1}{\sum_{k=1}^{M} w_k} \cdot
+    \mu_{A_m} \left( x^{(n)}; a_{A_m}, b_{A_m} \right) \\ &\cdot
+    (-b) \cdot \mu_{B_m} \left( x^{(n)}; a_{B_m}, b_{B_m} \right) \cdot \left( 1 - \mu_{B_m} \left( x^{(n)}; a_{B_m}, b_{B_m} \right) \right), \\ \\
+  \dfrac{\partial E}{\partial b_{B_m}} &= 
+    \dfrac{\partial E}{\partial o^{(n)}} 
+    \dfrac{\partial o^{(n)}}{\partial w_m}
+    \dfrac{\partial w_m}{\mu_{B_m}}
+    \dfrac{\partial \mu_{B_m}}{\partial b_{B_m}}, \\ &=
+    \left( o^{(n)} - t^{(n)} \right) \cdot
+    \dfrac{1}{\sum_{k=1}^{M} w_k} \cdot
+    \mu_{A_m} \left( x^{(n)}; a_{A_m}, b_{A_m} \right) \\ &\cdot
+    (x - a) \cdot \mu_{B_m} \left( x^{(n)}; a_{B_m}, b_{B_m} \right) \cdot \left( 1 - \mu_{B_m} \left( x^{(n)}; a_{B_m}, b_{B_m} \right) \right).
+\end{align*}
+
+\section*{Mjere pripadnosti}
+
+\section*{Pogreške na primjerima}
+
+\section*{Ukupna pogreška tokom treniranja}
+
+%This section is the introduction to your paper. Introduction should not be too elaborate, that is what other sections are for (the Introduction should definitely not spill over to second page). 
+%
+%This is the second paragraph of the introduction. Paragraphs are in \LaTeX separated by inserting an empty line in between them.  Avoid very large paragraphs (larger than half of the page height) but also avoid tiny paragraphs (e.g., one-sentence paragraphs).
+%
+%\section{Second section}
+%
+%This is the second section. In scientific papers this is usually (but not necessarily) the section in which related research is (briefly) described. 
+%
+%\subsection{First subsection}
+%\label{sec:first}
+%
+%This is a subsection of the second section.
+%
+%\subsection{Second subsection}
+%
+%This is the second subsection of the second section. Referencing the (sub)sections in text is performed as follows: ``in Section \ref{sec:first} we have shown \dots''.
+%
+%\subsubsection{Sub-subsection example} 
+%
+%This is a sub-subsection. If possible, it is better to avoid sub-subsections. 
+%
+%\section{Extent of the paper}
+%
+%The paper should have at least. The paper should have a minimum of 3 and a maximum of 5 pages plus an additional page for references.
+%
+%\section{Figures and tables}
+%
+%\subsection{Figures}
+%
+%Here is an example on how to include figures in the paper. Figures are included in \LaTeX code immediately \textit{after} the text in which these figures are referenced. Allow \LaTeX to place the figure where it believes is best (usually on top of the page of at the position where you would not place the figure). Figures are references as follows: ``Figure~\ref{fig:figure1} shows \dots''. Use tilda (\verb.~.) to prevent separation between the word ``Figure'' and its enumeration. 
+%
+%\begin{figure}
+%\begin{center}
+%\caption{This is the figure caption. Full sentences should be followed with a dot. The caption should be placed \textit{below} the figure. Caption should be short; details should be explained in the text.}
+%\label{fig:figure1}
+%\end{center}
+%\end{figure}
+%
+%\subsection{Tables}
+%
+%There are two types of tables: narrow tables that fit into one column and a wide table that spreads over both columns.
+%
+%\subsubsection{Narrow tables}
+%
+%An example of the narrows table is the Table~\ref{tab:narrow-table}. Do not use vertical lines in tables -- vertical tables have no effect and they make tables visually less attractive.
+%
+%\begin{table}
+%\caption{This is the caption of the table. Table captions should be placed \textit{above} the table.}
+%\label{tab:narrow-table}
+%\begin{center}
+%\begin{tabular}{ll}
+%\toprule
+%Heading1 & Heading2 \\
+%\midrule
+%One & First row text \\
+%Two   & Second row text \\
+%Three   & Third row text \\
+%      & Fourth row text \\
+%\bottomrule
+%\end{tabular}
+%\end{center}
+%\end{table}
+%
+%\subsection{Wide tables}
+%
+%Table~\ref{tab:wide-table} is an example of a wide table that spreads across both columns. The same can be done for wide figures that should spread across the whole width of the page. 
+%
+%\begin{table*}
+%\caption{Wide-table caption}
+%\label{tab:wide-table}
+%\begin{center}
+%\begin{tabular}{llr}
+%\toprule
+%Heading1 & Heading2 & Heading3\\
+%\midrule
+%A & A very long text, longer that the width of a single column & $128$\\
+%B & A very long text, longer that the width of a single column & $3123$\\
+%C & A very long text, longer that the width of a single column & $-32$\\
+%\bottomrule
+%\end{tabular}
+%\end{center}
+%\end{table*}
+%
+%\section{Math expressions and formulas}
+%
+%Math expressions and formulas that appear within the sentence should be writen inside the so-called \emph{inline} math environment: $2+3$, $\sqrt{16}$, $h(x)=\mathbf{1}(\theta_1 x_1 + \theta_0>0)$. Larger expressions and formulas (e.g., equations) should be written in the so-called \emph{displayed} math environment:
+%
+%\[
+%b^{(i)}_k = \begin{cases}
+%1 & \text{ako 
+%    $k = \text{argmin}_j \| \mathbf{x}^{(i)} - \mathbf{\mu}_j \|$}\\
+%0 & \text{inače}
+%\end{cases}
+%\]
+%
+%Math expressions which you reference in the text should be written inside the \textit{equation} environment:
+%
+%\begin{equation}\label{eq:kwidetildes-error}
+%J = \sum_{i=1}^N \sum_{k=1}^K 
+%b^{(i)}_k \| \mathbf{x}^{(i)} - \mathbf{\mu}_k \|^2
+%\end{equation}
+%
+%Now you can reference equation \eqref{eq:kwidetildes-error}. If the paragraphs continues right after the formula
+%
+%\begin{equation}
+%f(x) = x^2 + \varepsilon
+%\end{equation}
+%
+%\noindent like this one does, then use the command \emph{noindent} after the equation to prevent the indentation of the row starting the paragraph. 
+%
+%Multiletter words in the math environment should be written inside the command \emph{mathit}, otherwise \LaTeX will insert spacing between the letters to denote the multicplication of values denoted by symbols. For example, compare
+%$\mathit{Consistent}(h,\mathcal{D})$ and\\
+%$Consistent(h,\mathcal{D})$.
+%
+%If you need a math symbol, but you don't know the command for it in \LaTeX, try
+%\emph{Detexify}.\footnote{\texttt{http://detexify.kirelabs.org/}}
+%
+%All of this is produced for you automatically by using BibTeX. Sve ovo dobivate automatski ako. In the file \texttt{tar2014.bib} insert the BibTeX entries, and then reference them via their symbolic names.
+%
+%\section{Conclusion}
+%
+%Conclusion is the last enumerated section of the paper. Conclusion should not exceed half of the column and is typically be split into 2--3 paragraphs.
+%
+%\section*{Acknowledgements}
+%
+%If suited, before inserting the literature references you can include the Acknowledgements section in order to thank those who helped you in any way to deliver the paper, but are not co-authors of the paper.
+%
+%\bibliographystyle{tar2014}
+%\bibliography{tar2014} 
+
+\end{document}
+

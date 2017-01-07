@@ -33,12 +33,15 @@ initVariables = do
 saveFile :: Variables -> FilePath -> IO ()
 saveFile variables path = do
     gesturesV <- get $ gestures variables
-    writeFile path $ M.foldWithKey (\ k v s -> s ++ unlines [show k, show v]) "" gesturesV
+    writeFile path $ M.foldWithKey (\ k v s -> s ++ unlines [k, show v]) "" gesturesV
 
 loadFile :: Variables -> FilePath -> IO ()
-loadFile variables path = do
+loadFile variables path = void $ do
     file <- readFile path
-    let (keys, values) = join (***) (map snd) $ break (even . fst) $ zip [1 :: Int ..] $ lines file
+    let (keys, values) = join (***) (map snd) $ (filter (even . fst) &&& filter (odd . fst)) $ zip [0 :: Int ..] $ lines file
         newGestures = M.fromList $ zip keys (map read values)
+    putStrLn "Keys"
+    mapM_ print keys
+    putStrLn "Values"
+    mapM_ print values
     gestures variables $= newGestures
-    return ()

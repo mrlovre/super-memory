@@ -21,7 +21,7 @@ test1 = do
                 grads2 = backpropGradient nn1 input2 expected2
                 grads3 = backpropGradient nn1 input3 expected3
                 grads4 = backpropGradient nn1 input4 expected4
-                mGrad = meanGradient [grads1, grads2, grads3, grads4]
+                mGrad = totalGradient [grads1, grads2, grads3, grads4]
             return $ backpropCorrection 0.01 mGrad nn1
         go 0 nn1 = return nn1
         go n nn1 = do
