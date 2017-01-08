@@ -36,14 +36,17 @@ anfisInitialize d m = do
 
 trainANFIS :: [(Sample, Output)] -> TrainingAlgorithm -> Double -> ANFIS -> ANFIS
 trainANFIS samples algorithm eta anfis = let
-    etaNormalized = case algorithm of
-        StochasticGradientDescent -> eta
-        GradientDescent -> eta / fromIntegral (length samples)
     sampleGradients anfisCurrent@ANFIS {..} (sample@Sample {..}, expected) = let
-        (membershipLayerOutputs, tNormLayerNormalizedOutputs, transferLayerOutputs) = runANFISLayers anfisCurrent sample
+        (membershipLayerOutputs,
+            (tNormLayerOutputs, tNormLayerNormalizedOutputs),
+            transferLayerOutputs) = runANFISLayers anfisCurrent sample
         output = runANFIS anfisCurrent sample
         derErrOut = output - expected
-        derOutWeight i = transferLayerOutputs ! i
+        derOutWeight i = let
+            fi = transferLayerOutputs ! i
+            num = V.sum (V.zipWith (\ w fj -> w * (fi - fj)) tNormLayerOutputs transferLayerOutputs)
+            in  num / sumWeightsSquared
+        sumWeightsSquared = V.sum tNormLayerOutputs ** 2
         derWeightA i = snd membershipLayerOutputs ! i
         derWeightB i = fst membershipLayerOutputs ! i
         derAMembershipParams i = membershipParameterDerivatives $ membershipLayer ! 0 ! i
@@ -59,11 +62,11 @@ trainANFIS samples algorithm eta anfis = let
             in V.fromList $ map gradForRule [0 .. pred m]
         in (gradMembershipParams, gradTransferParams)
     updateTransferFunction LinearCombination {..} grads = let
-        [nTfp, nTfq, nTfr] = zipWith (-) [tfp, tfq, tfr] $ map (etaNormalized *) grads
+        [nTfp, nTfq, nTfr] = zipWith (-) [tfp, tfq, tfr] $ map (eta *) grads
         in LinearCombination nTfp nTfq nTfr
     updateMembershipLayer vectorTransferFunctions vectorGrads = let
         updateMembershipFunction Sigmoid {..} grads = let
-            [nMfa, nMfb] = zipWith (-) [mfa, mfb] $ map (etaNormalized / 10 *) grads
+            [nMfa, nMfb] = zipWith (-) [mfa, mfb] $ map (eta *) grads
             in Sigmoid nMfa nMfb
         in V.zipWith updateMembershipFunction vectorTransferFunctions vectorGrads
     in case algorithm of
@@ -84,10 +87,10 @@ trainANFIS samples algorithm eta anfis = let
 
 runANFIS :: ANFIS -> Sample -> Output
 runANFIS a sample = let
-    (_, tNormLayerNormalizedOutputs, transferLayerOutputs) = runANFISLayers a sample
+    (_, (_, tNormLayerNormalizedOutputs), transferLayerOutputs) = runANFISLayers a sample
     in V.sum $ V.zipWith (*) tNormLayerNormalizedOutputs transferLayerOutputs
 
-runANFISLayers :: ANFIS -> Sample -> ((Vector Double, Vector Double), Vector Double, Vector Double)
+runANFISLayers :: ANFIS -> Sample -> ((Vector Double, Vector Double), (Vector Double, Vector Double), Vector Double)
 runANFISLayers ANFIS {..} Sample {..} = let
     membershipLayerOutputs = let
         evaluateMembershipWith a = V.map (`evaluateMembership` a)
@@ -95,4 +98,4 @@ runANFISLayers ANFIS {..} Sample {..} = let
     tNormLayerOutputs = (uncurry $ V.zipWith (evaluateTNorm tNorm)) membershipLayerOutputs
     tNormLayerNormalizedOutputs = normalizeWeights tNormLayerOutputs
     transferLayerOutputs = V.map (`evaluateTransfer` [sx, sy]) transferLayer
-    in (membershipLayerOutputs, tNormLayerNormalizedOutputs, transferLayerOutputs)
+    in (membershipLayerOutputs, (tNormLayerOutputs, tNormLayerNormalizedOutputs), transferLayerOutputs)

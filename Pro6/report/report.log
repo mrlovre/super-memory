@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Arch Linux) (preloaded format=pdflatex 2016.12.11)  7 JAN 2017 18:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Arch Linux) (preloaded format=pdflatex 2016.12.11)  8 JAN 2017 02:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -506,35 +506,43 @@ Package microtype Info: Loading configuration file microtype.cfg.
 
 (/usr/share/texmf-dist/tex/latex/microtype/microtype.cfg
 File: microtype.cfg 2016/05/14 v2.6a microtype main configuration file (RS)
-)) (./report.aux)
+))
+(/usr/share/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count109
+\float@exts=\toks24
+\float@box=\box28
+\@float@everytoks=\toks25
+\@floatcapt=\box29
+) (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
 
 (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count109
+\scratchcounter=\count110
 \scratchdimen=\dimen136
-\scratchbox=\box28
-\nofMPsegments=\count110
-\nofMParguments=\count111
-\everyMPshowfont=\toks24
-\MPscratchCnt=\count112
+\scratchbox=\box30
+\nofMPsegments=\count111
+\nofMParguments=\count112
+\everyMPshowfont=\toks26
+\MPscratchCnt=\count113
 \MPscratchDim=\dimen137
-\MPnumerator=\count113
-\makeMPintoPDFobject=\count114
-\everyMPtoPDFconversion=\toks25
+\MPnumerator=\count114
+\makeMPintoPDFobject=\count115
+\everyMPtoPDFconversion=\toks27
 ) (/usr/share/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2016/05/21 v0.22 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -615,7 +623,7 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 23.
+LaTeX Info: Redefining \microtypecontext on input line 26.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2),
 (microtype)             factor: 1100.
@@ -633,7 +641,7 @@ Package microtype Info: Using default kerning set `alltext'.
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 25.
+LaTeX Font Info:    Try loading font information for U+msa on input line 28.
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
@@ -641,7 +649,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (/usr/share/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 25.
+LaTeX Font Info:    Try loading font information for U+msb on input line 28.
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -650,29 +658,102 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 ) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] (./report.aux)
- ) 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+<graf_normalna.pdf, id=23, 421.575pt x 316.18124pt>
+File: graf_normalna.pdf Graphic file (type pdf)
+ <use graf_normalna.pdf>
+Package pdftex.def Info: graf_normalna.pdf used on input line 225.
+(pdftex.def)             Requested size: 455.24411pt x 341.4417pt.
+
+[4] <graf_niska.pdf, id=27, 421.575pt x 316.18124pt>
+File: graf_niska.pdf Graphic file (type pdf)
+ <use graf_niska.pdf>
+Package pdftex.def Info: graf_niska.pdf used on input line 231.
+(pdftex.def)             Requested size: 455.24411pt x 341.4417pt.
+
+[5 <./graf_normalna.pdf>] <graf_visoka.pdf, id=45, 421.575pt x 316.18124pt>
+File: graf_visoka.pdf Graphic file (type pdf)
+
+<use graf_visoka.pdf>
+Package pdftex.def Info: graf_visoka.pdf used on input line 238.
+(pdftex.def)             Requested size: 455.24411pt x 341.4417pt.
+ [6 <./graf_niska.pdf>]
+<zadana.pdf, id=63, 429.10312pt x 313.9228pt>
+File: zadana.pdf Graphic file (type pdf)
+ <use zadana.pdf>
+Package pdftex.def Info: zadana.pdf used on input line 246.
+(pdftex.def)             Requested size: 455.24411pt x 333.04877pt.
+ [7 <./graf_visoka.pdf>] <naucena.pdf, id=82, 421.575pt x 316.18124pt>
+File: naucena.pdf Graphic file (type pdf)
+ <use naucena.pdf>
+Package pdftex.def Info: naucena.pdf used on input line 252.
+(pdftex.def)             Requested size: 455.24411pt x 341.4417pt.
+
+[8 <./zadana.pdf>] <razlika.pdf, id=103, 421.575pt x 316.18124pt>
+File: razlika.pdf Graphic file (type pdf)
+
+<use razlika.pdf>
+Package pdftex.def Info: razlika.pdf used on input line 258.
+(pdftex.def)             Requested size: 455.24411pt x 341.4417pt.
+ [9 <./naucena.pdf>]
+<mem_A.pdf, id=128, 1028.34187pt x 517.935pt>
+File: mem_A.pdf Graphic file (type pdf)
+ <use mem_A.pdf>
+Package pdftex.def Info: mem_A.pdf used on input line 266.
+(pdftex.def)             Requested size: 455.24411pt x 229.29092pt.
+ [10 <./razlika.pdf>] <mem_B.pdf, id=146, 1028.34187pt x 517.935pt>
+File: mem_B.pdf Graphic file (type pdf)
+ <use mem_B.pdf>
+Package pdftex.def Info: mem_B.pdf used on input line 272.
+(pdftex.def)             Requested size: 455.24411pt x 229.29092pt.
+
+<P.pdf, id=147, 1028.34187pt x 517.935pt>
+File: P.pdf Graphic file (type pdf)
+ <use P.pdf>
+Package pdftex.def Info: P.pdf used on input line 278.
+(pdftex.def)             Requested size: 455.24411pt x 229.29092pt.
+ [11 <./mem_A.pdf> <./mem_B.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./mem_B.pdf): PDF inclusion: multiple p
+dfs with page group included in a single page
+>] <T.pdf, id=160, 1028.34187pt x 517.935pt>
+File: T.pdf Graphic file (type pdf)
+ <use T.pdf>
+Package pdftex.def Info: T.pdf used on input line 286.
+(pdftex.def)             Requested size: 455.24411pt x 229.29092pt.
+
+<PT.pdf, id=161, 1028.34187pt x 517.935pt>
+File: PT.pdf Graphic file (type pdf)
+ <use PT.pdf>
+Package pdftex.def Info: PT.pdf used on input line 292.
+(pdftex.def)             Requested size: 455.24411pt x 229.29092pt.
+ [12 <./P.pdf> <./T.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./T.pdf): PDF inclusion: multiple pdfs 
+with page group included in a single page
+>] [13 <./PT.pdf>] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 4839 strings out of 493013
- 69500 string characters out of 6139316
- 192518 words of memory out of 5000000
- 8283 multiletter control sequences out of 15000+600000
+ 4955 strings out of 493013
+ 71027 string characters out of 6139316
+ 193884 words of memory out of 5000000
+ 8384 multiletter control sequences out of 15000+600000
  12283 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 40i,17n,38p,498b,235s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/
-share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on report.pdf (4 pages, 121604 bytes).
+ 40i,17n,38p,274b,235s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex
+10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/s
+hare/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></us
+r/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmsy8.pfb>
+Output written on report.pdf (13 pages, 4207919 bytes).
 PDF statistics:
- 61 PDF objects out of 1000 (max. 8388607)
- 43 compressed objects within 1 object stream
+ 256 PDF objects out of 1000 (max. 8388607)
+ 173 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 9217 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 9272 words of extra memory for PDF output out of 10000 (max. 10000000)
 

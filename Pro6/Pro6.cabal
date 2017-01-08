@@ -10,7 +10,7 @@ cabal-version:       >=1.10
 
 executable Pro6
   main-is:             Main.hs
-  default-extensions:  GADTs, RecordWildCards, NamedFieldPuns, StandaloneDeriving
+  default-extensions:  GADTs, RecordWildCards, NamedFieldPuns, StandaloneDeriving, MultiWayIf
   build-depends:       base == 4.9.*,
                        vector,
                        array,
