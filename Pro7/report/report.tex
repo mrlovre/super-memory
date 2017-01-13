@@ -1,0 +1,37 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[pdftex]{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=3.5cm]{geometry}
+\usepackage{indentfirst}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+\usepackage{float}
+
+\renewcommand{\figurename}{Slika}
+
+\microtypecontext{spacing=nonfrench}
+
+\allowdisplaybreaks
+
+\title{Neizrazito, evolucijsko i neuroračunarstvo:\\
+  Izvješće uz 7. laboratorijsku vježbu -- \\Klasifikacija umjetnom neuronskom mrežom treniranom genetskim algoritmom}
+\author{Lovre Mrčela}
+
+\date{13. siječnja 2017.}
+
+\begin{document}
+
+\maketitle
+
+\paragraph{Zadatak 1.}
+Razmotrite jedan neuron koji ima samo jedan ulaz.
+Njegov izlaz tada će biti određen izrazom:
+
+$$ y= \dfrac{1}{1 + \dfrac{|x - w|}{|s|}}$$
+Pretpostavite da je u neuron pohranjena vrijednost $w=2$. Nacrtajte \textit{na istom grafu} ovisnost $y(x; w=2)$ za tri slučaja: za $s=1$, za $s=0.25$, te za $s=4$ (svaku različitom bojom ili stilom linije). Za raspon apscise uzmite interval $[-8, 10]$. Razumijete li sada kako $s$ utječe na izlaz neurona $y$? Kako će izgledati izlaz neurona koji ima dva ulaza i što se tada kontrolira parametrima $s_1$ i $s_2$?
+
+\end{document}
