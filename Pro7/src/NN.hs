@@ -35,6 +35,9 @@ nnLayerT1 input n = do
     let t1N = n
     return NNLayerT1{..}
 
+t1TF :: Vector Double -> Vector Double -> Vector Double -> Double
+t1TF ws ss xs = 1 / (1 + V.sum (V.zipWith3 (\ w s x -> abs ((x - w) / s)) ws ss xs))
+
 nnLayerT2 :: Int -> Int -> IO NNLayer
 nnLayerT2 input n = do
     t2ws <- V.replicateM n $ V.fromListN input <$> getGausses 0.1
@@ -42,10 +45,10 @@ nnLayerT2 input n = do
     let t2N = n
     return NNLayerT2{..}
 
-t1TF :: Vector Double -> Vector Double -> Vector Double -> Double
-t1TF ws ss xs = 1 / (1 + V.sum (V.zipWith3 (\ w s x -> abs ((x - w) / s)) ws ss xs))
+t2TF :: Vector Double -> Double -> Vector Double -> Double
+t2TF ws b xs = ws `dot` xs + b
 
 nnLayerForwardPass :: NNLayer -> Vector Double -> Vector Double
 nnLayerForwardPass nnLayer input = case nnLayer of
     NNLayerT1{..} -> V.fromList $ map (\ i -> t1TF (t1ws ! i) (ss ! i) input) [0 .. pred t1N]
-    NNLayerT2{..} -> V.fromList $ map (\ i -> t2ws ! i `dot` input + bs ! i) [0 .. pred t2N]
+    NNLayerT2{..} -> V.fromList $ map (\ i -> t2TF (t2ws ! i) (bs ! i) input) [0 .. pred t2N]
