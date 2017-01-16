@@ -62,7 +62,7 @@ mutate1 NN{..} = do
             then (p +) <$> getGauss Configuration.additiveMutationMagnitude
             else return p
         mutateV b v = if b
-            then ((v `addV`) . V.fromList) <$> getGausses Configuration.additiveMutationMagnitude
+            then ((v `addV`) . V.fromListN (V.length v)) <$> getGausses Configuration.additiveMutationMagnitude
             else return v
     nnLayersN <- V.mapM (mutateLayer mutate mutateV) nnLayers
     return $ NN nnLayersN
@@ -73,7 +73,7 @@ mutate2 NN{..} = do
             then getGauss Configuration.destructiveMutationMagnitude
             else return p
         mutateV b v = if b
-            then V.fromList <$> getGausses Configuration.destructiveMutationMagnitude
+            then V.fromListN (V.length v) <$> getGausses Configuration.destructiveMutationMagnitude
             else return v
     nnLayersN <- V.mapM (mutateLayer mutate mutateV) nnLayers
     return $ NN nnLayersN

@@ -7,8 +7,8 @@ import qualified Data.Vector          as V
 import           Utility
 
 data NN where
-    NN :: {nnLayers :: Vector NNLayer} -> NN
-    deriving (Show)
+    NN :: {nnLayers :: !(Vector NNLayer)} -> NN
+    deriving (Show, Read)
 
 nn :: [Int] -> IO NN
 nn layers = do
@@ -25,9 +25,9 @@ nnForwardPass :: NN -> Vector Double -> Vector Double
 nnForwardPass NN{..} input = V.foldl (flip nnLayerForwardPass) input nnLayers
 
 data NNLayer where
-    NNLayerT1 :: {t1ws :: Vector (Vector Double), ss :: Vector (Vector Double), t1N :: Int} -> NNLayer
-    NNLayerT2 :: {t2ws :: Vector (Vector Double), bs :: Vector Double, t2N :: Int} -> NNLayer
-    deriving (Show)
+    NNLayerT1 :: {t1ws :: !(Vector (Vector Double)), ss :: !(Vector (Vector Double)), t1N :: !Int} -> NNLayer
+    NNLayerT2 :: {t2ws :: !(Vector (Vector Double)), bs :: !(Vector Double), t2N :: !Int} -> NNLayer
+    deriving (Show, Read)
 
 nnLayerT1 :: Int -> Int -> IO NNLayer
 nnLayerT1 input n = do
@@ -46,7 +46,7 @@ nnLayerT2 input n = do
     return NNLayerT2{..}
 
 t2TF :: Vector Double -> Double -> Vector Double -> Double
-t2TF ws b xs = ws `dot` xs + b
+t2TF ws b xs = sigmoid $ ws `dot` xs + b
 
 nnLayerForwardPass :: NNLayer -> Vector Double -> Vector Double
 nnLayerForwardPass nnLayer input = case nnLayer of

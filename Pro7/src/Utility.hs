@@ -1,6 +1,9 @@
 module Utility where
 
 import           Control.Monad.Random
+import           Data.Function
+import           Data.List
+import           Data.Ord
 import           Data.Vector                    (Vector)
 import qualified Data.Vector                    as V
 import           Statistics.Distribution
@@ -26,3 +29,21 @@ addV = V.zipWith (+)
 
 subV :: Vector Double -> Vector Double -> Vector Double
 subV = V.zipWith (-)
+
+divideClasses :: [[Double]] -> [(Vector Double, Vector Double)]
+divideClasses dataset = let
+    go (x : y : oneHot) = (V.fromList [x, y], V.fromList oneHot)
+    in map go dataset
+
+squareDistance :: Vector (Vector Double) -> Vector (Vector Double) -> Double
+squareDistance v1 v2 = V.sum $ V.map (V.sum . V.map (** 2)) $ V.zipWith subV v1 v2
+
+sigmoid :: Double -> Double
+sigmoid = (1/) . (1 +) . exp . negate
+
+untilM :: (Monad m) => (a -> Bool) -> (a -> m a) -> a -> m a
+untilM p r a = if
+    | p a -> return a
+    | otherwise -> do
+        a' <- r a
+        untilM p r $! a'

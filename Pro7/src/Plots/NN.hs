@@ -1,0 +1,1 @@
+/home/frka/haskell/NENR/Pro7/src/NN.hs

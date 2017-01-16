@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Arch Linux) (preloaded format=pdflatex 2016.12.11)  13 JAN 2017 14:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Arch Linux) (preloaded format=pdflatex 2016.12.11)  16 JAN 2017 17:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -521,34 +521,51 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \float@box=\box28
 \@float@everytoks=\toks25
 \@floatcapt=\box29
+)
+(/usr/share/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
+
+(/usr/share/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2016/05/22 v1.7-166 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 67.
+\captionmargin=\dimen136
+\captionmargin@=\dimen137
+\captionwidth=\dimen138
+\caption@tempdima=\dimen139
+\caption@indent=\dimen140
+\caption@parindent=\dimen141
+\caption@hangindent=\dimen142
+)
+\c@ContinuedFloat=\count110
+Package caption Info: float package is loaded.
 ) (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
 
 (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count110
-\scratchdimen=\dimen136
+\scratchcounter=\count111
+\scratchdimen=\dimen143
 \scratchbox=\box30
-\nofMPsegments=\count111
-\nofMParguments=\count112
+\nofMPsegments=\count112
+\nofMParguments=\count113
 \everyMPshowfont=\toks26
-\MPscratchCnt=\count113
-\MPscratchDim=\dimen137
-\MPnumerator=\count114
-\makeMPintoPDFobject=\count115
+\MPscratchCnt=\count114
+\MPscratchDim=\dimen144
+\MPnumerator=\count115
+\makeMPintoPDFobject=\count116
 \everyMPtoPDFconversion=\toks27
 ) (/usr/share/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2016/05/21 v0.22 Utility functions of pdfTeX for LuaTeX (HO
@@ -630,7 +647,7 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 26.
+LaTeX Info: Redefining \microtypecontext on input line 27.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2),
 (microtype)             factor: 1100.
@@ -648,7 +665,9 @@ Package microtype Info: Using default kerning set `alltext'.
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 28.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Try loading font information for U+msa on input line 29.
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
@@ -656,37 +675,138 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (/usr/share/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 28.
+LaTeX Font Info:    Try loading font information for U+msb on input line 29.
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 (/usr/share/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-) [1
+)
+Underfull \hbox (badness 10000) in paragraph at lines 35--37
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./report.aux) ) 
+ []
+
+<function.png, id=1, 803.0pt x 602.25pt>
+File: function.png Graphic file (type png)
+ <use function.png>
+Package pdftex.def Info: function.png used on input line 41.
+(pdftex.def)             Requested size: 364.19667pt x 273.15117pt.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 51.
+
+(/usr/share/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+Package microtype Info: Loading generic settings for font family
+(microtype)             `cmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--57
+
+ []
+
+<clusters.png, id=2, 803.0pt x 602.25pt>
+File: clusters.png Graphic file (type png)
+ <use clusters.png>
+Package pdftex.def Info: clusters.png used on input line 61.
+(pdftex.def)             Requested size: 364.19667pt x 273.15117pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 71--74
+
+ []
+
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2 <./function.png> <./clu
+sters.png>]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 78.
+ (/usr/share/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 78.
+
+Underfull \hbox (badness 10000) in paragraph at lines 99--108
+
+ []
+
+
+Overfull \hbox (2.96953pt too wide) in paragraph at lines 114--115
+[]\T1/cmr/m/n/12 (-10) 1. £vor: $\OML/cmm/m/it/12 w[] \OT1/cmr/m/n/12 (-10) = 2
+37\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 (-10) 70\OML/cmm/m/it/12 ; w[] \OT1/cmr/m/n
+/12 (-10) = 289\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 (-10) 31\OML/cmm/m/it/12 ; w[]
+ \OT1/cmr/m/n/12 (-10) = \OMS/cmsy/m/n/12 ^^@\OT1/cmr/m/n/12 (-10) 235\OML/cmm/
+m/it/12 :\OT1/cmr/m/n/12 (-10) 88\OML/cmm/m/it/12 ; w[] \OT1/cmr/m/n/12 (-10) =
+ \OMS/cmsy/m/n/12 ^^@\OT1/cmr/m/n/12 (-10) 158\OML/cmm/m/it/12 :\OT1/cmr/m/n/12
+ (-10) 85\OML/cmm/m/it/12 ; w[] \OT1/cmr/m/n/12 (-10) = \OMS/cmsy/m/n/12 ^^@\OT
+1/cmr/m/n/12 (-10) 128\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 (-10) 27\OML/cmm/m/it/1
+2 ; w[] \OT1/cmr/m/n/12 (-10) =
+ []
+
+
+Overfull \hbox (12.30289pt too wide) in paragraph at lines 116--117
+[]\T1/cmr/m/n/12 (-10) 3. £vor: $\OML/cmm/m/it/12 w[] \OT1/cmr/m/n/12 (-10) = \
+OMS/cmsy/m/n/12 ^^@\OT1/cmr/m/n/12 (-10) 227\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 (
+-10) 57\OML/cmm/m/it/12 ; w[] \OT1/cmr/m/n/12 (-10) = 237\OML/cmm/m/it/12 :\OT1
+/cmr/m/n/12 (-10) 62\OML/cmm/m/it/12 ; w[] \OT1/cmr/m/n/12 (-10) = \OMS/cmsy/m/
+n/12 ^^@\OT1/cmr/m/n/12 (-10) 55\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 (-10) 31\OML/
+cmm/m/it/12 ; w[] \OT1/cmr/m/n/12 (-10) = \OMS/cmsy/m/n/12 ^^@\OT1/cmr/m/n/12 (
+-10) 120\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 (-10) 01\OML/cmm/m/it/12 ; w[] \OT1/c
+mr/m/n/12 (-10) = \OMS/cmsy/m/n/12 ^^@\OT1/cmr/m/n/12 (-10) 1048\OML/cmm/m/it/1
+2 :\OT1/cmr/m/n/12 (-10) 72\OML/cmm/m/it/12 ; w[] \OT1/cmr/m/n/12 (-10) =
+ []
+
+[3] <trained.png, id=29, 803.0pt x 602.25pt>
+File: trained.png Graphic file (type png)
+ <use trained.png>
+Package pdftex.def Info: trained.png used on input line 123.
+(pdftex.def)             Requested size: 364.19667pt x 273.15117pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--134
+
+ []
+
+<trained2.png, id=30, 803.0pt x 602.25pt>
+File: trained2.png Graphic file (type png)
+ <use trained2.png>
+Package pdftex.def Info: trained2.png used on input line 142.
+(pdftex.def)             Requested size: 364.19667pt x 273.15117pt.
+
+<trained3.png, id=31, 803.0pt x 602.25pt>
+File: trained3.png Graphic file (type png)
+ <use trained3.png>
+Package pdftex.def Info: trained3.png used on input line 160.
+(pdftex.def)             Requested size: 364.19667pt x 273.15117pt.
+ [4] [5 <./trained.png> <./trained2.png>] [6 <./trained3.png>] (./report.aux) )
+ 
 Here is how much of TeX's memory you used:
- 5148 strings out of 493013
- 75316 string characters out of 6139316
- 175312 words of memory out of 5000000
- 8576 multiletter control sequences out of 15000+600000
- 15422 words of font info for 60 fonts, out of 8000000 for 9000
+ 6346 strings out of 493013
+ 96873 string characters out of 6139316
+ 204171 words of memory out of 5000000
+ 9706 multiletter control sequences out of 15000+600000
+ 21664 words of font info for 94 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 40i,6n,38p,473b,239s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/shar
-e/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr
-/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-di
+ 40i,6n,42p,475b,401s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/sha
+re/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfb
+x1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb></usr
+/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-di
 st/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/
 public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super
-/sfrm2074.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb>
-Output written on report.pdf (1 page, 107251 bytes).
+/sfrm2074.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb><
+/usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texm
+f-dist/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on report.pdf (6 pages, 289806 bytes).
 PDF statistics:
- 45 PDF objects out of 1000 (max. 8388607)
- 32 compressed objects within 1 object stream
+ 97 PDF objects out of 1000 (max. 8388607)
+ 66 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 14849 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 25626 words of extra memory for PDF output out of 29859 (max. 10000000)
 

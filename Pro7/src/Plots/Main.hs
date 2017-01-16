@@ -3,8 +3,11 @@ module Main where
 import           Data.Function
 import           Data.List
 import           Data.Ord
+import           Data.Vector                            (Vector, (!))
+import qualified Data.Vector                            as V
 import           Graphics.Rendering.Chart.Backend.Cairo
 import           Graphics.Rendering.Chart.Easy
+import           NN
 
 main :: IO ()
 main = do
@@ -23,6 +26,33 @@ main = do
         let indClasses = map show [1 ..] `zip` classes
             classes = divideClasses dataset
         mapM_ (plot . uncurry points) indClasses
+    trained <- read <$> readFile "train.model" :: IO NN
+    toFile def "trained.png" $ do
+        layout_title .= "Trained NN"
+        setColors [opaque blue, opaque red, opaque green, opaque yellow, opaque cyan]
+        let indClasses = map show [1 ..] `zip` classes
+            classes = divideClasses dataset
+            centroids = map (\ v -> (v ! 0, v ! 1)) $ V.toList $ t1ws $ V.head $ nnLayers trained
+        mapM_ (plot . uncurry points) indClasses
+        plot $ points "learned centroids" centroids
+    trained2 <- read <$> readFile "train_2_8_4_3.model" :: IO NN
+    toFile def "trained2.png" $ do
+        layout_title .= "Trained NN"
+        setColors [opaque blue, opaque red, opaque green, opaque yellow, opaque cyan]
+        let indClasses = map show [1 ..] `zip` classes
+            classes = divideClasses dataset
+            centroids = map (\ v -> (v ! 0, v ! 1)) $ V.toList $ t1ws $ V.head $ nnLayers trained2
+        mapM_ (plot . uncurry points) indClasses
+        plot $ points "learned centroids" centroids
+    trained3 <- read <$> readFile "train_2_6_4_3.model" :: IO NN
+    toFile def "trained3.png" $ do
+        layout_title .= "Trained NN"
+        setColors [opaque blue, opaque red, opaque green, opaque yellow, opaque cyan]
+        let indClasses = map show [1 ..] `zip` classes
+            classes = divideClasses dataset
+            centroids = map (\ v -> (v ! 0, v ! 1)) $ V.toList $ t1ws $ V.head $ nnLayers trained3
+        mapM_ (plot . uncurry points) indClasses
+        plot $ points "learned centroids" centroids
 
 divideClasses :: [[Double]] -> [[(Double, Double)]]
 divideClasses dataset = let
